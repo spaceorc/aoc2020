@@ -15,9 +15,22 @@ namespace aoc
     {
         static void Main(string[] args)
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            var numbers = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt").Select(long.Parse).ToArray();
 
-            Console.Out.WriteLine("result");
+            
+        }
+
+        static void Main1(string[] args)
+        {
+            var numbers = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt").Select(long.Parse).ToArray();
+
+            for (int i = 0; i < numbers.Length - 2; i++)
+            for (int k = i + 1; k < numbers.Length - 1; k++)
+            for (int l = k + 1; l < numbers.Length; l++)
+            {
+                if (numbers[i] + numbers[k] + numbers[l] == 2020)
+                    Console.Out.WriteLine(numbers[i] * numbers[k] * numbers[l]) ;
+            }
         }
     }
 }
