@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Threading;
-using System.Threading.Tasks;
-using Experiments;
-using MoreLinq.Extensions;
 
 namespace aoc
 {
@@ -17,7 +10,54 @@ namespace aoc
         {
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
             var res = 0;
-            
+
+            Console.Out.WriteLine(res);
+        }
+
+        static void Main_3_2(string[] args)
+        {
+            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            long res1 = Calc(1, 1);
+            long res2 = Calc(3, 1);
+            long res3 = Calc(5, 1);
+            long res4 = Calc(7, 1);
+            long res5 = Calc(1, 2);
+
+            Console.Out.WriteLine(res1 * res2 * res3 * res4 * res5);
+
+            int Calc(int dx, int dy)
+            {
+                var res = 0;
+
+                var x = 0;
+                var y = 0;
+                while (y < lines.Length)
+                {
+                    if (lines[y][x] == '#')
+                        res++;
+                    y += dy;
+                    x = (x + dx) % lines[0].Length;
+                }
+
+                return res;
+            }
+        }
+
+        static void Main_3_1(string[] args)
+        {
+            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            var res = 0;
+
+            var x = 0;
+            var y = 0;
+            while (y < lines.Length)
+            {
+                if (lines[y][x] == '#')
+                    res++;
+                y++;
+                x = (x + 3) % lines[0].Length;
+            }
+
             Console.Out.WriteLine(res);
         }
 
