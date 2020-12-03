@@ -16,7 +16,7 @@ namespace aoc
 
         static void Main_3_2(string[] args)
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            var lines = File.ReadAllLines("day3.txt");
             long res1 = Calc(1, 1);
             long res2 = Calc(3, 1);
             long res3 = Calc(5, 1);
@@ -45,7 +45,7 @@ namespace aoc
 
         static void Main_3_1(string[] args)
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            var lines = File.ReadAllLines("day3.txt");
             var res = 0;
 
             var x = 0;
@@ -63,7 +63,7 @@ namespace aoc
 
         static void Main_2_2(string[] args)
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            var lines = File.ReadAllLines("day2.txt");
             var res = 0;
             foreach (var line in lines)
             {
@@ -83,7 +83,7 @@ namespace aoc
 
         static void Main_2_1(string[] args)
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            var lines = File.ReadAllLines("day2.txt");
             var res = 0;
             foreach (var line in lines)
             {
@@ -102,7 +102,7 @@ namespace aoc
 
         static void Main_1_2(string[] args)
         {
-            var numbers = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt").Select(long.Parse).ToArray();
+            var numbers = File.ReadAllLines("day1.txt").Select(long.Parse).ToArray();
 
             for (int i = 0; i < numbers.Length - 2; i++)
             for (int j = i + 1; j < numbers.Length - 1; j++)
@@ -115,7 +115,7 @@ namespace aoc
 
         static void Main_1_1(string[] args)
         {
-            var numbers = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt").Select(long.Parse).ToArray();
+            var numbers = File.ReadAllLines("day1.txt").Select(long.Parse).ToArray();
 
             for (int i = 0; i < numbers.Length - 1; i++)
             for (int j = i + 1; j < numbers.Length; j++)
