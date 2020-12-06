@@ -10,8 +10,38 @@ namespace aoc
         static void Main(string[] args)
         {
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
-
+            
             var res = 0;
+            Console.Out.WriteLine(res);
+        }
+
+        static void Main_6_2(string[] args)
+        {
+            var groups = File.ReadAllText("day6.txt")
+                .Split("\n\n", StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                .ToArray();
+            
+            var res = groups.Select(Solve).Sum();
+            Console.Out.WriteLine(res);
+
+            static int Solve(string[] gr)
+            {
+                var r = gr[0].ToHashSet();
+                foreach (var item in gr)
+                    r.IntersectWith(item);
+
+                return r.Count;
+            }
+        }
+
+        static void Main_6_1(string[] args)
+        {
+            var groups = File.ReadAllText("day6.txt")
+                .Split("\n\n", StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Replace("\n", "").Trim());
+
+            var res = groups.Select(x => x.Distinct().Count()).Sum();
             Console.Out.WriteLine(res);
         }
 
