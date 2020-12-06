@@ -7,7 +7,7 @@ namespace aoc
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
             
@@ -15,7 +15,7 @@ namespace aoc
             Console.Out.WriteLine(res);
         }
 
-        static void Main_6_2(string[] args)
+        static void Main_6_2()
         {
             var groups = File.ReadAllText("day6.txt")
                 .Split("\n\n", StringSplitOptions.RemoveEmptyEntries)
@@ -35,7 +35,7 @@ namespace aoc
             }
         }
 
-        static void Main_6_1(string[] args)
+        static void Main_6_1()
         {
             var groups = File.ReadAllText("day6.txt")
                 .Split("\n\n", StringSplitOptions.RemoveEmptyEntries)
