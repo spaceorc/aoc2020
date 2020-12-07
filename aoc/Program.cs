@@ -18,10 +18,10 @@ namespace aoc
         static void Main_7_2()
         {
             var rules = File.ReadAllLines("day7.txt")
-                .Select(r => r.Split(" contain "))
+                .Select(r => r.Split(" bags contain "))
                 .Select(r => new
                 {
-                    outer = r[0].Replace(" bags", ""),
+                    outer = r[0],
                     inner = r[1]
                         .Replace(" bags", "")
                         .Replace(" bag", "")
@@ -50,8 +50,8 @@ namespace aoc
         static void Main_7_1()
         {
             var rules = File.ReadAllLines("day7.txt")
-                .Select(r => r.Split(" contain "))
-                .Select(r => new {outer = r[0].Replace(" bags", ""), inner = r[1]})
+                .Select(r => r.Split(" bags contain "))
+                .Select(r => new {outer = r[0], inner = r[1]})
                 .ToArray();
 
 
