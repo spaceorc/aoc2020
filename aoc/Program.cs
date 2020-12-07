@@ -10,9 +10,67 @@ namespace aoc
         static void Main()
         {
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            long res = 0;
             
-            var res = 0;
             Console.Out.WriteLine(res);
+        }
+
+        static void Main_7_2()
+        {
+            var rules = File.ReadAllLines("day7.txt")
+                .Select(r => r.Split(" contain "))
+                .Select(r => new
+                {
+                    outer = r[0].Replace(" bags", ""),
+                    inner = r[1]
+                        .Replace(" bags", "")
+                        .Replace(" bag", "")
+                        .Split(new[] {',', '.'}, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(v => v.Trim())
+                        .Where(v => v != "no other")
+                        .Select(v => v.Split(' ', 2))
+                        .Select(v => (count: int.Parse(v[0]), color: v[1]))
+                        .ToList()
+                })
+                .ToDictionary(x => x.outer, x => x.inner);
+
+
+            Console.Out.WriteLine(Calc("shiny gold"));
+
+            long Calc(string outer)
+            {
+                var res = 0L;
+                foreach (var (count, color) in rules[outer])
+                    res += count + count * Calc(color);
+
+                return res;
+            }
+        }
+
+        static void Main_7_1()
+        {
+            var rules = File.ReadAllLines("day7.txt")
+                .Select(r => r.Split(" contain "))
+                .Select(r => new {outer = r[0].Replace(" bags", ""), inner = r[1]})
+                .ToArray();
+
+
+            var queue = new Queue<string>();
+            queue.Enqueue("shiny gold");
+            var used = new HashSet<string>();
+            used.Add("shiny gold");
+            while (queue.Count > 0)
+            {
+                var cur = queue.Dequeue();
+                foreach (var next in rules.Where(x => x.inner.Contains(cur)))
+                {
+                    if (used.Add(next.outer))
+                        queue.Enqueue(next.outer);
+                }
+            }
+
+
+            Console.Out.WriteLine(used.Count - 1);
         }
 
         static void Main_6_2()
@@ -21,7 +79,7 @@ namespace aoc
                 .Split("\n\n", StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Split('\n', StringSplitOptions.RemoveEmptyEntries))
                 .ToArray();
-            
+
             var res = groups.Select(Solve).Sum();
             Console.Out.WriteLine(res);
 
