@@ -10,9 +10,113 @@ namespace aoc
         static void Main()
         {
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+
             long res = 0;
-            
             Console.Out.WriteLine(res);
+        }
+
+        static void Main_9_2()
+        {
+            var program = File.ReadAllLines("day8.txt")
+                .Select(x => x.Split())
+                .ToArray();
+
+
+            foreach (var line in program)
+            {
+                if (line[0] == "jmp")
+                {
+                    line[0] = "nop";
+                    var x = Eval();
+                    if (x != long.MinValue)
+                    {
+                        Console.Out.WriteLine(x);
+                        return;
+                    }
+
+                    line[0] = "jmp";
+                }
+                else if (line[0] == "nop")
+                {
+                    line[0] = "jmp";
+                    var x = Eval();
+                    if (x != long.MinValue)
+                    {
+                        Console.Out.WriteLine(x);
+                        return;
+                    }
+
+                    line[0] = "nop";
+                }
+            }
+
+            long Eval()
+            {
+                long acc = 0;
+                long ip = 0;
+                var used = new HashSet<long>();
+                while (ip < program.Length)
+                {
+                    if (ip < 0)
+                        return long.MinValue;
+
+                    if (!used.Add(ip))
+                        return long.MinValue;
+
+                    switch (program[ip][0])
+                    {
+                        case "nop":
+                            ip++;
+                            break;
+                        case "acc":
+                            acc += long.Parse(program[ip][1]);
+                            ip++;
+                            break;
+                        case "jmp":
+                            ip += long.Parse(program[ip][1]);
+                            break;
+                        default:
+                            throw new Exception("WTF");
+                    }
+                }
+
+                return acc;
+            }
+        }
+
+        static void Main_9_1()
+        {
+            var program = File.ReadAllLines("day8.txt")
+                .Select(x => x.Split())
+                .ToArray();
+
+            long acc = 0;
+            long ip = 0;
+            var used = new HashSet<long>();
+            while (ip < program.Length)
+            {
+                if (!used.Add(ip))
+                {
+                    Console.Out.WriteLine(acc);
+                    return;
+                }
+
+                switch (program[ip][0])
+                {
+                    case "nop":
+                        ip++;
+                        break;
+                    case "acc":
+                        acc += long.Parse(program[ip][1]);
+                        ip++;
+                        break;
+                    case "jmp":
+                        ip += long.Parse(program[ip][1]);
+                        break;
+                    default:
+                        throw new Exception("WTF");
+                }
+            }
         }
 
         static void Main_7_2()
