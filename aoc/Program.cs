@@ -15,18 +15,15 @@ namespace aoc
             Console.Out.WriteLine(res);
         }
 
-        static void Main_9_2()
+        static void Main_8_2()
         {
-            var program = File.ReadAllLines("day8.txt")
-                .Select(x => x.Split())
-                .ToArray();
-
+            var program = Computer.Parse(File.ReadAllLines("day8.txt"));
 
             foreach (var line in program)
             {
-                if (line[0] == "jmp")
+                if (line.type == IT.jmp)
                 {
-                    line[0] = "nop";
+                    line.type = IT.nop;
                     var x = Eval();
                     if (x != long.MinValue)
                     {
@@ -34,11 +31,11 @@ namespace aoc
                         return;
                     }
 
-                    line[0] = "jmp";
+                    line.type = IT.jmp;
                 }
-                else if (line[0] == "nop")
+                else if (line.type == IT.nop)
                 {
-                    line[0] = "jmp";
+                    line.type = IT.jmp;
                     var x = Eval();
                     if (x != long.MinValue)
                     {
@@ -46,76 +43,44 @@ namespace aoc
                         return;
                     }
 
-                    line[0] = "nop";
+                    line.type = IT.nop;
                 }
             }
 
             long Eval()
             {
-                long acc = 0;
-                long ip = 0;
+                var computer = new Computer();
                 var used = new HashSet<long>();
-                while (ip < program.Length)
+                while (!computer.IsTerminated(program))
                 {
-                    if (ip < 0)
+                    if (computer.ip < 0)
                         return long.MinValue;
 
-                    if (!used.Add(ip))
+                    if (!used.Add(computer.ip))
                         return long.MinValue;
 
-                    switch (program[ip][0])
-                    {
-                        case "nop":
-                            ip++;
-                            break;
-                        case "acc":
-                            acc += long.Parse(program[ip][1]);
-                            ip++;
-                            break;
-                        case "jmp":
-                            ip += long.Parse(program[ip][1]);
-                            break;
-                        default:
-                            throw new Exception("WTF");
-                    }
+                    computer = computer.Next(program);
                 }
 
-                return acc;
+                return computer.acc;
             }
         }
 
-        static void Main_9_1()
+        static void Main_8_1()
         {
-            var program = File.ReadAllLines("day8.txt")
-                .Select(x => x.Split())
-                .ToArray();
+            var program = Computer.Parse(File.ReadAllLines("day8.txt"));
 
-            long acc = 0;
-            long ip = 0;
+            var computer = new Computer();
             var used = new HashSet<long>();
-            while (ip < program.Length)
+            while (!computer.IsTerminated(program))
             {
-                if (!used.Add(ip))
+                if (!used.Add(computer.ip))
                 {
-                    Console.Out.WriteLine(acc);
+                    Console.Out.WriteLine(computer.acc);
                     return;
                 }
 
-                switch (program[ip][0])
-                {
-                    case "nop":
-                        ip++;
-                        break;
-                    case "acc":
-                        acc += long.Parse(program[ip][1]);
-                        ip++;
-                        break;
-                    case "jmp":
-                        ip += long.Parse(program[ip][1]);
-                        break;
-                    default:
-                        throw new Exception("WTF");
-                }
+                computer = computer.Next(program);
             }
         }
 
