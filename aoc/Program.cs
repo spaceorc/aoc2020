@@ -9,10 +9,87 @@ namespace aoc
     {
         static void Main()
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt");
+            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
+                .Select(long.Parse)
+                .ToArray();
 
-            long res = 0;
+            var res = 0;
             Console.Out.WriteLine(res);
+        }
+
+        static void Main_9_2()
+        {
+            var nums = File.ReadAllLines("day9.txt")
+                .Select(long.Parse)
+                .ToArray();
+
+            var res = Find();
+
+            for (var i = 0; i < nums.Length; i++)
+            {
+                long sum = 0;
+                for (var j = i; j < nums.Length; j++)
+                {
+                    sum += nums[j];
+                    if (sum == res)
+                    {
+                        var range = nums.Skip(i).Take(j - i + 1).ToArray();
+                        Console.Out.WriteLine(range.Min() + range.Max());
+                        return;
+                    }
+
+                    if (sum > res)
+                        break;
+                }
+            }
+
+            long Find()
+            {
+                for (var i = 25; i < nums.Length; i++)
+                {
+                    var range = nums.Skip(i - 25).Take(25).ToArray();
+                    var ok = false;
+                    for (var j = 0; j < range.Length - 1; j++)
+                    for (var k = j + 1; k < range.Length; k++)
+                    {
+                        if (range[j] + range[k] == nums[i])
+                        {
+                            ok = true;
+                            break;
+                        }
+                    }
+
+                    if (!ok)
+                        return nums[i];
+                }
+
+                throw new Exception("WTF???");
+            }
+        }
+
+        static void Main_9_1()
+        {
+            var nums = File.ReadAllLines("day9.txt")
+                .Select(long.Parse)
+                .ToArray();
+
+            for (var i = 25; i < nums.Length; i++)
+            {
+                var range = nums.Skip(i - 25).Take(25).ToArray();
+                var ok = false;
+                for (var j = 0; j < range.Length - 1; j++)
+                for (var k = j + 1; k < range.Length; k++)
+                {
+                    if (range[j] + range[k] == nums[i])
+                    {
+                        ok = true;
+                        break;
+                    }
+                }
+
+                if (!ok)
+                    Console.Out.WriteLine(nums[i]);
+            }
         }
 
         static void Main_8_2()
