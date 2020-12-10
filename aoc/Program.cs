@@ -13,8 +13,64 @@ namespace aoc
                 .Select(long.Parse)
                 .ToArray();
 
-            var res = 0;
+            long res = 0;
             Console.Out.WriteLine(res);
+        }
+
+        static void Main_10_2()
+        {
+            var nums = File.ReadAllLines("day10.txt")
+                .Select(long.Parse)
+                .OrderBy(x => x)
+                .ToList();
+            nums.Insert(0, 0);
+            nums.Add(nums.Last() + 3);
+
+            var res = new Dictionary<int, long>();
+
+            Console.Out.WriteLine(Calc(nums.Count - 1));
+
+            long Calc(int last)
+            {
+                if (last == 0)
+                    return 1;
+
+                if (res.TryGetValue(last, out var result))
+                    return result;
+
+                var count = 0L;
+                for (var i = last - 1; i >= 0; i--)
+                {
+                    if (nums[i] < nums[last] - 3)
+                        break;
+
+                    count += Calc(i);
+                }
+
+                return res[last] = count;
+            }
+        }
+
+        static void Main_10_1()
+        {
+            var nums = File.ReadAllLines("day10.txt")
+                .Select(long.Parse)
+                .OrderBy(x => x)
+                .ToList();
+            nums.Insert(0, 0);
+            nums.Add(nums.Last() + 3);
+
+            var d1 = 0;
+            var d3 = 0;
+            for (var i = 0; i < nums.Count - 1; i++)
+            {
+                if (nums[i + 1] - nums[i] == 1)
+                    d1++;
+                if (nums[i + 1] - nums[i] == 3)
+                    d3++;
+            }
+
+            Console.Out.WriteLine(d1 * d3);
         }
 
         static void Main_9_2()
