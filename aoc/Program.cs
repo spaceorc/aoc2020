@@ -9,12 +9,181 @@ namespace aoc
     {
         static void Main()
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
-                .Select(long.Parse)
-                .ToArray();
+            Main_11_1();
+            Main_11_2();
+        }
 
-            long res = 0;
-            Console.Out.WriteLine(res);
+        static void Main_11_2()
+        {
+            var lines = File.ReadAllLines("day11.txt")
+                .Select(x => x.ToCharArray()).ToArray();
+
+            var nears = new List<V>[lines.Length, lines[0].Length];
+            for (int y = 0; y < lines.Length; y++)
+            for (int x = 0; x < lines[0].Length; x++)
+                nears[y, x] = CalcNears(x, y);
+
+            var hash = CalcHash();
+            while (true)
+            {
+                lines = Sim();
+                var nextHash = CalcHash();
+                if (nextHash == hash)
+                    break;
+
+                hash = nextHash;
+            }
+
+            Console.Out.WriteLine(lines.SelectMany(x => x).Count(c => c == '#'));
+            
+            int CalcHash()
+            {
+                var res = 0;
+                foreach (var l in lines)
+                    res = HashCode.Combine(res, new string(l).GetHashCode());
+
+                return res;
+            }
+
+            char[][] Sim()
+            {
+                var next = lines.Select(x => x.ToArray()).ToArray();
+                for (int y = 0; y < lines.Length; y++)
+                for (int x = 0; x < lines[0].Length; x++)
+                    next[y][x] = Calc(x, y);
+
+                return next;
+            }
+
+            char Calc(int x, int y)
+            {
+                if (lines[y][x] == '.')
+                    return '.';
+
+                int cnt = 0;
+                foreach (var near in nears[y, x])
+                {
+                    if (lines[near.Y][near.X] == '#')
+                        cnt++;
+                }
+
+                if (lines[y][x] == 'L' && cnt == 0)
+                    return '#';
+
+                if (lines[y][x] == '#' && cnt >= 5)
+                    return 'L';
+
+                return lines[y][x];
+            }
+
+            List<V> CalcNears(int x, int y)
+            {
+                var dvs = new[]
+                {
+                    new V(-1, -1), new V(-1, 0), new V(-1, 1), new V(0, 1), new V(1, 1), new V(1, 0), new V(1, -1),
+                    new V(0, -1)
+                };
+
+                var res = new List<V>();
+
+                foreach (var dv in dvs)
+                {
+                    var v = new V(x, y);
+                    while (true)
+                    {
+                        v += dv;
+
+                        if (v.X < 0)
+                            break;
+                        if (v.X >= lines[0].Length)
+                            break;
+                        if (v.Y < 0)
+                            break;
+                        if (v.Y >= lines.Length)
+                            break;
+
+                        if (lines[v.Y][v.X] == '.')
+                            continue;
+
+                        res.Add(v);
+                        break;
+                    }
+                }
+
+                return res;
+            }
+        }
+
+        static void Main_11_1()
+        {
+            var lines = File.ReadAllLines("day11.txt")
+                .Select(x => x.ToCharArray()).ToArray();
+
+            var hash = CalcHash();
+            while (true)
+            {
+                lines = Sim();
+                var nextHash = CalcHash();
+                if (nextHash == hash)
+                    break;
+
+                hash = nextHash;
+            }
+
+            Console.Out.WriteLine(lines.SelectMany(x => x).Count(c => c == '#'));
+
+            int CalcHash()
+            {
+                var res = 0;
+                foreach (var l in lines)
+                    res = HashCode.Combine(res, new string(l).GetHashCode());
+
+                return res;
+            }
+
+            char[][] Sim()
+            {
+                var next = lines.Select(x => x.ToArray()).ToArray();
+                for (int y = 0; y < lines.Length; y++)
+                for (int x = 0; x < lines[0].Length; x++)
+                    next[y][x] = Calc(x, y);
+
+                return next;
+            }
+
+            char Calc(int x, int y)
+            {
+                if (lines[y][x] == '.')
+                    return '.';
+
+                int cnt = 0;
+                for (int dx = -1; dx <= 1; dx++)
+                for (int dy = -1; dy <= 1; dy++)
+                {
+                    if (dx == 0 && dy == 0)
+                        continue;
+
+                    if (x + dx < 0)
+                        continue;
+                    if (x + dx >= lines[0].Length)
+                        continue;
+                    if (y + dy < 0)
+                        continue;
+                    if (y + dy >= lines.Length)
+                        continue;
+
+                    if (lines[y + dy][x + dx] == '#')
+                        cnt++;
+                }
+
+                if (lines[y][x] == 'L' && cnt == 0)
+                    return '#';
+
+                if (lines[y][x] == '#' && cnt >= 4)
+                    return 'L';
+
+                return lines[y][x];
+            }
         }
 
         static void Main_10_2()
