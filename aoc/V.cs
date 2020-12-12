@@ -19,7 +19,9 @@ namespace aoc
         public static bool operator ==(V a, V b) => a.Equals(b);
         public static bool operator !=(V a, V b) => !(a == b);
         public static V operator +(V a, V b) => new V(a.X + b.X, a.Y + b.Y);
+        public static V operator *(V a, int k) => new V(a.X * k, a.Y * k);
         public static V operator -(V a, V b) => new V(a.X - b.X, a.Y - b.Y);
+        public static V operator -(V a) => new V(-a.X, -a.Y);
 
         public int MLen() => Math.Abs(X) + Math.Abs(Y);
         public static int XProd(V a, V b) => a.X * b.Y - a.Y * b.X;

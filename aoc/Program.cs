@@ -9,8 +9,122 @@ namespace aoc
     {
         static void Main()
         {
-            Main_11_1();
-            Main_11_2();
+            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
+                .Select(long.Parse)
+                .ToArray();
+
+            long res = 0;
+            Console.Out.WriteLine(res);
+        }
+
+        static void Main_12_2()
+        {
+            var lines = File.ReadAllLines("day12.txt")
+                .Select(x => (cmd: x[0], n: int.Parse(x.Substring(1))))
+                .ToArray();
+
+            var dv = new[] {new V(0, -1), new V(1, 0), new V(0, 1), new V(-1, 0)};
+            var pos = new V(0, 0);
+            var vp = new V(10, -1);
+
+            foreach (var (cmd, n) in lines)
+            {
+                switch (cmd)
+                {
+                    case 'F':
+                        pos += vp * n;
+                        break;
+                    case 'N':
+                        vp += dv[0] * n;
+                        break;
+                    case 'E':
+                        vp += dv[1] * n;
+                        break;
+                    case 'S':
+                        vp += dv[2] * n;
+                        break;
+                    case 'W':
+                        vp += dv[3] * n;
+                        break;
+                    case 'L':
+                        switch (n / 90 % 4)
+                        {
+                            case 0:
+                                break;
+                            case 2:
+                                vp = -vp;
+                                break;
+                            case 1:
+                                vp = new V(vp.Y, -vp.X);
+                                break;
+                            case 3:
+                                vp = new V(-vp.Y, vp.X);
+                                break;
+                        }
+
+                        break;
+                    case 'R':
+                        switch (n / 90 % 4)
+                        {
+                            case 0:
+                                break;
+                            case 2:
+                                vp = -vp;
+                                break;
+                            case 3:
+                                vp = new V(vp.Y, -vp.X);
+                                break;
+                            case 1:
+                                vp = new V(-vp.Y, vp.X);
+                                break;
+                        }
+
+                        break;
+                }
+            }
+
+            Console.Out.WriteLine(pos.MLen());
+        }
+
+        static void Main_12_1()
+        {
+            var lines = File.ReadAllLines("day12.txt")
+                .Select(x => (cmd: x[0], n: int.Parse(x.Substring(1))))
+                .ToArray();
+
+            var delta = new[] {new V(0, -1), new V(1, 0), new V(0, 1), new V(-1, 0)};
+            var dir = 1;
+            var pos = new V(0, 0);
+
+            foreach (var (cmd, n) in lines)
+            {
+                switch (cmd)
+                {
+                    case 'F':
+                        pos += delta[dir] * n;
+                        break;
+                    case 'N':
+                        pos += delta[0] * n;
+                        break;
+                    case 'E':
+                        pos += delta[1] * n;
+                        break;
+                    case 'S':
+                        pos += delta[2] * n;
+                        break;
+                    case 'W':
+                        pos += delta[3] * n;
+                        break;
+                    case 'L':
+                        dir = (dir + 4 - n / 90 % 4) % 4;
+                        break;
+                    case 'R':
+                        dir = (dir + n / 90) % 4;
+                        break;
+                }
+            }
+
+            Console.Out.WriteLine(pos.MLen());
         }
 
         static void Main_11_2()
@@ -35,7 +149,7 @@ namespace aoc
             }
 
             Console.Out.WriteLine(lines.SelectMany(x => x).Count(c => c == '#'));
-            
+
             int CalcHash()
             {
                 var res = 0;
