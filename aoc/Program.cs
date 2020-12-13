@@ -11,6 +11,9 @@ namespace aoc
         {
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
                 .ToArray();
+
+            long res = 0;
+            Console.Out.WriteLine(res);
         }
 
         static void Main_13_2()
