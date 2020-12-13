@@ -10,11 +10,93 @@ namespace aoc
         static void Main()
         {
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
-                .Select(long.Parse)
                 .ToArray();
+        }
 
-            long res = 0;
-            Console.Out.WriteLine(res);
+        static void Main_13_2()
+        {
+            var lines = File.ReadAllLines("day13.txt");
+
+            // x*N = b mod K
+            var nums = lines[1].Split(',');
+
+            var eqs = new List<(long x, long b, long K)>();
+
+            var first = long.Parse(nums[0]);
+            for (int i = 1; i < nums.Length; i++)
+            {
+                if (nums[i] == "x")
+                    continue;
+
+                var next = long.Parse(nums[i]);
+                long delta = i;
+
+                var b = (next - delta % next) % next;
+                eqs.Add((first % next, b, next));
+            }
+
+            var results = new List<long>();
+            var results2 = new List<long>();
+
+            while (eqs.Count > 1)
+            {
+                var nextEqs = new List<(long x, long b, long K)>();
+                for (int i = 0; i < eqs.Count; i++)
+                {
+                    var (x, b, K) = eqs[i];
+
+                    // N = x^-1 * b mod K
+                    var N = Inv(x, K) * b % K;
+
+                    if (i == 0)
+                    {
+                        results.Add(N);
+                        results2.Add(K);
+                    }
+                    else
+                        nextEqs.Add((results2.Last() % K, (N % K + K - results.Last() % K) % K, K));
+                }
+
+                eqs = nextEqs;    
+            }
+
+            var (xx, bb, KK) = eqs.Last();
+            var NN = Inv(xx, KK) * bb % KK;
+            for (int i = results.Count - 1; i >= 0; i--)
+                NN = NN * results2[i] + results[i];
+
+            Console.Out.WriteLine(first * NN);
+            
+            static long Bp(long a, long n, long mod)
+            {
+                long res = 1;
+                while (n != 0)
+                {
+                    if ((n & 1) != 0)
+                        res = res * a % mod;
+                    a = a * a % mod;
+                    n >>= 1;
+                }
+
+                return res;
+            }
+
+            static long Inv(long x, long mod)
+            {
+                return Bp(x, mod - 2, mod);
+            }
+        }
+
+        static void Main_13_1()
+        {
+            var lines = File.ReadAllLines("day13.txt");
+
+            var ts = long.Parse(lines[0]);
+            var nums = lines[1].Split(',').Where(x => x != "x").Select(long.Parse).ToArray();
+
+            var array = nums.Select(x => new {r = ts % x == 0 ? ts % x : x - ts % x, x}).ToArray();
+            var min = array.OrderBy(x => x.r).First();
+            Console.Out.WriteLine(min.r * min.x);
         }
 
         static void Main_12_2()
