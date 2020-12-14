@@ -44,24 +44,15 @@ namespace aoc
                                 for (var k = 0; k < masks.Count; k++)
                                 {
                                     if (k < masks.Count / 2)
-                                    {
-                                        var (resetMask, setMask) = masks[k];
-                                        masks[k] = (resetMask, setMask | bit);
-                                    }
+                                        masks[k] = (masks[k].resetMask, masks[k].setMask | bit);
                                     else
-                                    {
-                                        var (resetMask, setMask) = masks[k];
-                                        masks[k] = (resetMask | bit, setMask);
-                                    }
+                                        masks[k] = (masks[k].resetMask | bit, masks[k].setMask);
                                 }
 
                                 break;
                             case '1':
-                                for (var j = 0; j < masks.Count; j++)
-                                {
-                                    var (resetMask, setMask) = masks[j];
-                                    masks[j] = (resetMask, setMask | bit);
-                                }
+                                for (var k = 0; k < masks.Count; k++)
+                                    masks[k] = (masks[k].resetMask, masks[k].setMask | bit);
 
                                 break;
                         }
