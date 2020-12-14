@@ -9,11 +9,135 @@ namespace aoc
     {
         static void Main()
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
+            // var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
+            //     .Select(long.Parse)
+            //     .ToArray();
+            //
+            // long res = 0;
+            // Console.Out.WriteLine(res);
+            
+            Main_14_1();
+            Main_14_2();
+        }
+
+        static void Main_14_2()
+        {
+            var lines = File.ReadAllLines("day14.txt")
+                .Select(x => x.Split(new[] {" ", "mask", "=", "mem", "[", "]"}, StringSplitOptions.RemoveEmptyEntries))
                 .ToArray();
 
-            long res = 0;
-            Console.Out.WriteLine(res);
+            var mask0s = new List<long>();
+            var mask1s = new List<long>();
+            var mem = new Dictionary<long, long>();
+            foreach (var line in lines)
+            {
+                if (line.Length == 1)
+                {
+                    mask0s.Clear();
+                    mask1s.Clear();
+                    mask0s.Add(0);
+                    mask1s.Add(0);
+
+                    for (int i = 0; i < line[0].Length; i++)
+                    {
+                        switch (line[0][i])
+                        {
+                            case 'X':
+                                mask1s.AddRange(mask1s);
+                                mask0s.AddRange(mask0s);
+                                for (int j = 0; j < mask0s.Count; j++)
+                                {
+                                    if (j < mask0s.Count / 2)
+                                    {
+                                        mask1s[j] = (mask1s[j] << 1) | 1L;
+                                        mask0s[j] = (mask0s[j] << 1);
+                                    }
+                                    else
+                                    {
+                                        mask0s[j] = (mask0s[j] << 1) | 1L;
+                                        mask1s[j] = (mask1s[j] << 1);
+                                    }
+                                }
+
+                                break;
+                            case '1':
+                                for (int j = 0; j < mask0s.Count; j++)
+                                {
+                                    mask1s[j] = (mask1s[j] << 1) | 1L;
+                                    mask0s[j] = (mask0s[j] << 1);
+                                }
+
+                                break;
+                            case '0':
+                                for (int j = 0; j < mask0s.Count; j++)
+                                {
+                                    mask0s[j] = (mask0s[j] << 1);
+                                    mask1s[j] = (mask1s[j] << 1);
+                                }
+
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    var adr = long.Parse(line[0]);
+                    var value = long.Parse(line[1]);
+                    for (var i = 0; i < mask0s.Count; i++)
+                    {
+                        var mask0 = mask0s[i];
+                        var mask1 = mask1s[i];
+                        mem[adr & ~mask0 | mask1] = value;
+                    }
+                }
+            }
+
+            Console.Out.WriteLine(mem.Sum(x => x.Value));
+        }
+
+        static void Main_14_1()
+        {
+            var lines = File.ReadAllLines("day14.txt")
+                .Select(x => x.Split(new[] {" ", "mask", "=", "mem", "[", "]"}, StringSplitOptions.RemoveEmptyEntries))
+                .ToArray();
+
+            long mask0 = 0;
+            long mask1 = 0;
+            var mem = new long[100000];
+            foreach (var line in lines)
+            {
+                if (line.Length == 1)
+                {
+                    mask0 = 0;
+                    mask1 = 0;
+                    for (int i = 0; i < line[0].Length; i++)
+                    {
+                        switch (line[0][i])
+                        {
+                            case '0':
+                                mask0 = (mask0 << 1) | 1L;
+                                mask1 = mask1 << 1;
+                                break;
+                            case '1':
+                                mask0 = mask0 << 1;
+                                mask1 = (mask1 << 1) | 1L;
+                                break;
+                            case 'X':
+                                mask0 = mask0 << 1;
+                                mask1 = mask1 << 1;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    var adr = int.Parse(line[0]);
+                    var value = long.Parse(line[1]);
+                    mem[adr] = value & ~mask0 | mask1;
+                }
+            }
+
+            Console.Out.WriteLine(mem.Sum());
         }
 
         static void Main_13_2()
@@ -60,7 +184,7 @@ namespace aoc
                         nextEqs.Add((results2.Last() % K, (N % K + K - results.Last() % K) % K, K));
                 }
 
-                eqs = nextEqs;    
+                eqs = nextEqs;
             }
 
             var (xx, bb, KK) = eqs.Last();
@@ -69,7 +193,7 @@ namespace aoc
                 NN = NN * results2[i] + results[i];
 
             Console.Out.WriteLine(first * NN);
-            
+
             static long Bp(long a, long n, long mod)
             {
                 long res = 1;
