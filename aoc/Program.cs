@@ -15,7 +15,7 @@ namespace aoc
             //
             // long res = 0;
             // Console.Out.WriteLine(res);
-            
+
             Main_14_1();
             Main_14_2();
         }
@@ -26,53 +26,41 @@ namespace aoc
                 .Select(x => x.Split(new[] {" ", "mask", "=", "mem", "[", "]"}, StringSplitOptions.RemoveEmptyEntries))
                 .ToArray();
 
-            var mask0s = new List<long>();
-            var mask1s = new List<long>();
+            var masks = new List<(long resetMask, long setMask)>();
             var mem = new Dictionary<long, long>();
             foreach (var line in lines)
             {
                 if (line.Length == 1)
                 {
-                    mask0s.Clear();
-                    mask1s.Clear();
-                    mask0s.Add(0);
-                    mask1s.Add(0);
-
-                    for (int i = 0; i < line[0].Length; i++)
+                    masks.Clear();
+                    masks.Add((0, 0));
+                    long bit = 1;
+                    for (var i = line[0].Length - 1; i >= 0; i--, bit <<= 1)
                     {
                         switch (line[0][i])
                         {
                             case 'X':
-                                mask1s.AddRange(mask1s);
-                                mask0s.AddRange(mask0s);
-                                for (int j = 0; j < mask0s.Count; j++)
+                                masks.AddRange(masks);
+                                for (var k = 0; k < masks.Count; k++)
                                 {
-                                    if (j < mask0s.Count / 2)
+                                    if (k < masks.Count / 2)
                                     {
-                                        mask1s[j] = (mask1s[j] << 1) | 1L;
-                                        mask0s[j] = (mask0s[j] << 1);
+                                        var (resetMask, setMask) = masks[k];
+                                        masks[k] = (resetMask, setMask | bit);
                                     }
                                     else
                                     {
-                                        mask0s[j] = (mask0s[j] << 1) | 1L;
-                                        mask1s[j] = (mask1s[j] << 1);
+                                        var (resetMask, setMask) = masks[k];
+                                        masks[k] = (resetMask | bit, setMask);
                                     }
                                 }
 
                                 break;
                             case '1':
-                                for (int j = 0; j < mask0s.Count; j++)
+                                for (var j = 0; j < masks.Count; j++)
                                 {
-                                    mask1s[j] = (mask1s[j] << 1) | 1L;
-                                    mask0s[j] = (mask0s[j] << 1);
-                                }
-
-                                break;
-                            case '0':
-                                for (int j = 0; j < mask0s.Count; j++)
-                                {
-                                    mask0s[j] = (mask0s[j] << 1);
-                                    mask1s[j] = (mask1s[j] << 1);
+                                    var (resetMask, setMask) = masks[j];
+                                    masks[j] = (resetMask, setMask | bit);
                                 }
 
                                 break;
@@ -83,12 +71,8 @@ namespace aoc
                 {
                     var adr = long.Parse(line[0]);
                     var value = long.Parse(line[1]);
-                    for (var i = 0; i < mask0s.Count; i++)
-                    {
-                        var mask0 = mask0s[i];
-                        var mask1 = mask1s[i];
-                        mem[adr & ~mask0 | mask1] = value;
-                    }
+                    foreach (var (resetMask, setMask) in masks)
+                        mem[adr & ~resetMask | setMask] = value;
                 }
             }
 
@@ -101,39 +85,21 @@ namespace aoc
                 .Select(x => x.Split(new[] {" ", "mask", "=", "mem", "[", "]"}, StringSplitOptions.RemoveEmptyEntries))
                 .ToArray();
 
-            long mask0 = 0;
-            long mask1 = 0;
+            long andMask = 0;
+            long orMask = 0;
             var mem = new long[100000];
             foreach (var line in lines)
             {
                 if (line.Length == 1)
                 {
-                    mask0 = 0;
-                    mask1 = 0;
-                    for (int i = 0; i < line[0].Length; i++)
-                    {
-                        switch (line[0][i])
-                        {
-                            case '0':
-                                mask0 = (mask0 << 1) | 1L;
-                                mask1 = mask1 << 1;
-                                break;
-                            case '1':
-                                mask0 = mask0 << 1;
-                                mask1 = (mask1 << 1) | 1L;
-                                break;
-                            case 'X':
-                                mask0 = mask0 << 1;
-                                mask1 = mask1 << 1;
-                                break;
-                        }
-                    }
+                    andMask = Convert.ToInt64(line[0].Replace('X', '1'), 2);
+                    orMask = Convert.ToInt64(line[0].Replace('X', '0'), 2);
                 }
                 else
                 {
                     var adr = int.Parse(line[0]);
                     var value = long.Parse(line[1]);
-                    mem[adr] = value & ~mask0 | mask1;
+                    mem[adr] = value & andMask | orMask;
                 }
             }
 
@@ -150,7 +116,7 @@ namespace aoc
             var eqs = new List<(long x, long b, long K)>();
 
             var first = long.Parse(nums[0]);
-            for (int i = 1; i < nums.Length; i++)
+            for (var i = 1; i < nums.Length; i++)
             {
                 if (nums[i] == "x")
                     continue;
@@ -168,7 +134,7 @@ namespace aoc
             while (eqs.Count > 1)
             {
                 var nextEqs = new List<(long x, long b, long K)>();
-                for (int i = 0; i < eqs.Count; i++)
+                for (var i = 0; i < eqs.Count; i++)
                 {
                     var (x, b, K) = eqs[i];
 
@@ -189,7 +155,7 @@ namespace aoc
 
             var (xx, bb, KK) = eqs.Last();
             var NN = Inv(xx, KK) * bb % KK;
-            for (int i = results.Count - 1; i >= 0; i--)
+            for (var i = results.Count - 1; i >= 0; i--)
                 NN = NN * results2[i] + results[i];
 
             Console.Out.WriteLine(first * NN);
@@ -342,8 +308,8 @@ namespace aoc
                 .Select(x => x.ToCharArray()).ToArray();
 
             var nears = new List<V>[lines.Length, lines[0].Length];
-            for (int y = 0; y < lines.Length; y++)
-            for (int x = 0; x < lines[0].Length; x++)
+            for (var y = 0; y < lines.Length; y++)
+            for (var x = 0; x < lines[0].Length; x++)
                 nears[y, x] = CalcNears(x, y);
 
             var hash = CalcHash();
@@ -371,8 +337,8 @@ namespace aoc
             char[][] Sim()
             {
                 var next = lines.Select(x => x.ToArray()).ToArray();
-                for (int y = 0; y < lines.Length; y++)
-                for (int x = 0; x < lines[0].Length; x++)
+                for (var y = 0; y < lines.Length; y++)
+                for (var x = 0; x < lines[0].Length; x++)
                     next[y][x] = Calc(x, y);
 
                 return next;
@@ -383,7 +349,7 @@ namespace aoc
                 if (lines[y][x] == '.')
                     return '.';
 
-                int cnt = 0;
+                var cnt = 0;
                 foreach (var near in nears[y, x])
                 {
                     if (lines[near.Y][near.X] == '#')
@@ -467,8 +433,8 @@ namespace aoc
             char[][] Sim()
             {
                 var next = lines.Select(x => x.ToArray()).ToArray();
-                for (int y = 0; y < lines.Length; y++)
-                for (int x = 0; x < lines[0].Length; x++)
+                for (var y = 0; y < lines.Length; y++)
+                for (var x = 0; x < lines[0].Length; x++)
                     next[y][x] = Calc(x, y);
 
                 return next;
@@ -479,9 +445,9 @@ namespace aoc
                 if (lines[y][x] == '.')
                     return '.';
 
-                int cnt = 0;
-                for (int dx = -1; dx <= 1; dx++)
-                for (int dy = -1; dy <= 1; dy++)
+                var cnt = 0;
+                for (var dx = -1; dx <= 1; dx++)
+                for (var dy = -1; dy <= 1; dy++)
                 {
                     if (dx == 0 && dy == 0)
                         continue;
