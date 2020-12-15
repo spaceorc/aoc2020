@@ -9,15 +9,39 @@ namespace aoc
     {
         static void Main()
         {
-            // var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
-            //     .Select(long.Parse)
-            //     .ToArray();
-            //
-            // long res = 0;
-            // Console.Out.WriteLine(res);
+            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
+                .Select(long.Parse)
+                .ToArray();
+            
+            long res = 0;
+            Console.Out.WriteLine(res);
+        }
 
-            Main_14_1();
-            Main_14_2();
+        static void Main_15()
+        {
+            var lines = "2,0,1,9,5,19".Split(',')
+                .Select(long.Parse)
+                .ToArray();
+            
+            var spokenAt = new Dictionary<long, (long t1, long t2)>();
+            
+            for (var i = 0; i < lines.Length; i++)
+                spokenAt[lines[i]] = (-1, i);
+
+            var last = lines[^1];
+
+            const int count = 30000000; // or 2020 for part 1
+            for (var i = lines.Length; i < count; i++)
+            {
+                var (t1, t2) = spokenAt[last];
+                last = t1 == -1 ? 0 : t2 - t1;
+                if (spokenAt.TryGetValue(last, out var tt))
+                    spokenAt[last] = (tt.t2, i);
+                else
+                    spokenAt[last] = (-1, i);
+            }
+            
+            Console.Out.WriteLine(last);
         }
 
         static void Main_14_2()
