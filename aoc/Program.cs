@@ -17,14 +17,118 @@ namespace aoc
             Console.Out.WriteLine(res);
         }
 
+        static void Main_16_2()
+        {
+            var groups = File.ReadAllText("day16.txt")
+                .Split("\n\n")
+                .ToArray();
+
+            var rules = groups[0]
+                .Split('\n')
+                .Select(x =>
+                {
+                    var strings = x.Split(new[] {": ", " or ", "-"}, StringSplitOptions.RemoveEmptyEntries);
+                    return strings
+                        .Skip(1)
+                        .Select(long.Parse)
+                        .ToArray();
+                })
+                .ToArray();
+
+            var myTickets = groups[1]
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Skip(1)
+                .Select(x => x.Split(',').Select(long.Parse).ToArray())
+                .ToArray();
+
+            var tickets = groups[2]
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Skip(1)
+                .Select(x => x.Split(',').Select(long.Parse).ToArray())
+                .ToArray();
+
+            tickets = myTickets.Concat(tickets.Where(IsGoodTicket)).ToArray();
+            var ticketSize = tickets[0].Length;
+
+            var matches = new List<int[]>();
+            for (var i = 0; i < ticketSize; i++)
+            {
+                var matchingRuleIndices = rules
+                    .Select((rule, ruleIndex) => (rule, ruleIndex))
+                    .Where(x => tickets.All(t => IsMatch(t[i], x.rule)))
+                    .Select(r => r.ruleIndex).ToArray();
+
+                matches.Add(matchingRuleIndices);
+            }
+
+            var matchingRuleIndex = Enumerable.Repeat(-1, ticketSize).ToArray();
+
+            while (true)
+            {
+                var found = false;
+                for (var i = 0; i < matches.Count; i++)
+                {
+                    if (matches[i].Length == 1)
+                    {
+                        found = true;
+                        matchingRuleIndex[i] = matches[i][0];
+                    }
+                }
+
+                if (!found)
+                    break;
+
+                matches = matches.Select(m => m.Except(matchingRuleIndex).ToArray()).ToList();
+            }
+
+            var values = Enumerable
+                .Range(0, 6)
+                .Select(ruleIndex => myTickets[0][Array.IndexOf(matchingRuleIndex, ruleIndex)])
+                .ToArray();
+            Console.Out.WriteLine(values.Aggregate(1L, (a, b) => a * b));
+
+            bool IsMatch(long v, long[] rule) => v >= rule[0] && v <= rule[1] || v >= rule[2] && v <= rule[3];
+            bool IsGoodTicket(long[] ticket) => ticket.All(v => rules.Any(rule => IsMatch(v, rule)));
+        }
+
+        static void Main_16_1()
+        {
+            var groups = File.ReadAllText("day16.txt")
+                .Split("\n\n")
+                .ToArray();
+
+            var rules = groups[0]
+                .Split('\n')
+                .Select(x =>
+                {
+                    var strings = x.Split(new[] {": ", " or ", "-"}, StringSplitOptions.RemoveEmptyEntries);
+                    return strings
+                        .Skip(1)
+                        .Select(long.Parse)
+                        .ToArray();
+                })
+                .ToArray();
+
+            var tickets = groups[2]
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Skip(1)
+                .Select(x => x.Split(',').Select(long.Parse).ToArray())
+                .ToArray();
+
+            var invalidValues = tickets.SelectMany(t => t.Where(v => !rules.Any(rule => IsMatch(v, rule)))).ToArray();
+            Console.Out.WriteLine(invalidValues.Sum());
+
+            bool IsMatch(long v, long[] rule) => v >= rule[0] && v <= rule[1] || v >= rule[2] && v <= rule[3];
+        }
+
         static void Main_15()
         {
             var lines = "2,0,1,9,5,19".Split(',')
                 .Select(long.Parse)
                 .ToArray();
-            
+
             var spokenAt = new Dictionary<long, (long t1, long t2)>();
-            
+
             for (var i = 0; i < lines.Length; i++)
                 spokenAt[lines[i]] = (-1, i);
 
@@ -40,7 +144,7 @@ namespace aoc
                 else
                     spokenAt[last] = (-1, i);
             }
-            
+
             Console.Out.WriteLine(last);
         }
 
