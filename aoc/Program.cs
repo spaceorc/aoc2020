@@ -17,6 +17,89 @@ namespace aoc
             Console.Out.WriteLine(res);
         }
 
+        static void Main_17_2()
+        {
+            var lines = File.ReadAllLines("day17.txt");
+            var sizeX = lines[0].Length + 14;
+            var sizeY = lines.Length + 14;
+            var sizeZ = 1 + 14;
+            var sizeW = 1 + 14;
+            var dv = new V4(7, 7, 7, 7);
+            var map = new Map4<bool>(sizeX, sizeY, sizeZ, sizeW);
+            var map2 = new Map4<bool>(sizeX, sizeY, sizeZ, sizeW);
+
+            for (var y = 0; y < lines.Length; y++)
+            for (var x = 0; x < lines[0].Length; x++)
+            {
+                var v = new V4(x, y, 0, 0) + dv;
+                if (lines[y][x] == '#')
+                    map[v] = true;
+            }
+            
+            for (var i = 0; i < 6; i++)
+                Sim();
+            
+            Console.Out.WriteLine(map.data.Count(x => x));
+
+            void Sim()
+            {
+                map2.Clear();
+                foreach (var v in map.RangeNoBorders())
+                {
+                    var count = v.Nears().Count(n => map[n]);
+                    if (map[v])
+                        map2[v] = count == 2 || count == 3;
+                    else
+                        map2[v] = count == 3;
+                }
+
+                var tmp = map;
+                map = map2;
+                map2 = tmp;
+            }
+        }
+
+        static void Main_17_1()
+        {
+            var lines = File.ReadAllLines("day17.txt");
+            var sizeX = lines[0].Length + 14;
+            var sizeY = lines.Length + 14;
+            var sizeZ = 1 + 14;
+            var dv = new V3(7, 7, 7);
+            
+            var map = new Map3<bool>(sizeX, sizeY, sizeZ);
+            var map2 = new Map3<bool>(sizeX, sizeY, sizeZ);
+
+            for (var y = 0; y < lines.Length; y++)
+            for (var x = 0; x < lines[0].Length; x++)
+            {
+                var v = new V3(x, y, 0) + dv;
+                if (lines[y][x] == '#')
+                    map[v] = true;
+            }
+
+            for (var i = 0; i < 6; i++)
+                Sim();
+            Console.Out.WriteLine(map.data.Count(x => x));
+
+            void Sim()
+            {
+                map2.Clear();
+                foreach (var v in map.RangeNoBorders())
+                {
+                    var count = v.Nears().Count(n => map[n]);
+                    if (map[v])
+                        map2[v] = count == 2 || count == 3;
+                    else
+                        map2[v] = count == 3;
+                }
+
+                var tmp = map;
+                map = map2;
+                map2 = tmp;
+            }
+        }
+
         static void Main_16_2()
         {
             var groups = File.ReadAllText("day16.txt")
