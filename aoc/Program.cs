@@ -5,20 +5,21 @@ using System.Linq;
 
 namespace aoc
 {
-    class Program
+    public class Program
     {
         static void Main()
         {
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
                 .Select(long.Parse)
                 .ToArray();
-            
+
             long res = 0;
             Console.Out.WriteLine(res);
         }
 
         static void Main_18_2()
         {
+            // see alternative solution in class `N`
             var lines = File.ReadAllLines("day18.txt");
             Console.Out.WriteLine(lines.Sum(Eval));
 
@@ -65,6 +66,7 @@ namespace aoc
                             cur.Add(c - '0');
                             break;
                     }
+
                     EvalAdd();
                 }
 
@@ -105,6 +107,7 @@ namespace aoc
 
         static void Main_18_1()
         {
+            // see alternative solution in class `N`
             var lines = File.ReadAllLines("day18.txt");
             Console.Out.WriteLine(lines.Sum(Eval));
 
