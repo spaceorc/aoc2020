@@ -17,6 +17,155 @@ namespace aoc
             Console.Out.WriteLine(res);
         }
 
+        static void Main_18_2()
+        {
+            var lines = File.ReadAllLines("day18.txt");
+            Console.Out.WriteLine(lines.Sum(Eval));
+
+
+            static long Eval(string expression)
+            {
+                const int mul = -1;
+                const int add = -2;
+
+                var stack = new Stack<List<long>>();
+                var cur = new List<long>();
+                foreach (var c in expression)
+                {
+                    switch (c)
+                    {
+                        case ' ':
+                            continue;
+
+                        case '(':
+                            stack.Push(cur);
+                            cur = new List<long>();
+                            break;
+
+                        case ')':
+                            EvalMul();
+                            var rr = cur.Single();
+                            cur = stack.Pop();
+                            cur.Add(rr);
+                            break;
+
+                        case '*':
+                            EvalMul();
+                            cur.Add(mul);
+                            break;
+
+                        case '+':
+                            cur.Add(add);
+                            break;
+
+                        default:
+                            if (!char.IsDigit(c))
+                                throw new Exception($"Invalid char '{c}' in expression '{expression}'");
+
+                            cur.Add(c - '0');
+                            break;
+                    }
+                    EvalAdd();
+                }
+
+                EvalMul();
+                return cur.Single();
+
+                void EvalAdd()
+                {
+                    if (cur.Count >= 3)
+                    {
+                        if (cur[^2] == add)
+                        {
+                            var r = cur[^1] + cur[^3];
+                            cur.RemoveAt(cur.Count - 1);
+                            cur.RemoveAt(cur.Count - 1);
+                            cur.RemoveAt(cur.Count - 1);
+                            cur.Add(r);
+                        }
+                    }
+                }
+
+                void EvalMul()
+                {
+                    if (cur.Count >= 3)
+                    {
+                        if (cur[^2] == mul)
+                        {
+                            var r = cur[^1] * cur[^3];
+                            cur.RemoveAt(cur.Count - 1);
+                            cur.RemoveAt(cur.Count - 1);
+                            cur.RemoveAt(cur.Count - 1);
+                            cur.Add(r);
+                        }
+                    }
+                }
+            }
+        }
+
+        static void Main_18_1()
+        {
+            var lines = File.ReadAllLines("day18.txt");
+            Console.Out.WriteLine(lines.Sum(Eval));
+
+            static long Eval(string expression)
+            {
+                const int mul = -1;
+                const int add = -2;
+
+                var stack = new Stack<List<long>>();
+                var expr = new List<long>();
+                foreach (var c in expression)
+                {
+                    switch (c)
+                    {
+                        case ' ':
+                            continue;
+
+                        case '(':
+                            stack.Push(expr);
+                            expr = new List<long>();
+                            break;
+
+                        case ')':
+                            var res = expr.Single();
+                            expr = stack.Pop();
+                            expr.Add(res);
+                            break;
+
+                        case '*':
+                            expr.Add(mul);
+                            break;
+
+                        case '+':
+                            expr.Add(add);
+                            break;
+
+                        default:
+                            if (!char.IsDigit(c))
+                                throw new Exception($"Invalid char '{c}' in expression '{expression}'");
+                            expr.Add(c - '0');
+                            break;
+                    }
+
+
+                    if (expr.Count == 3)
+                    {
+                        var r = expr[1] switch
+                        {
+                            mul => expr[0] * expr[2],
+                            add => expr[0] + expr[2],
+                            _ => throw new Exception($"Invalid operation '{expr[1]}")
+                        };
+                        expr.Clear();
+                        expr.Add(r);
+                    }
+                }
+
+                return expr.Single();
+            }
+        }
+
         static void Main_17_2()
         {
             var lines = File.ReadAllLines("day17.txt");
@@ -35,10 +184,10 @@ namespace aoc
                 if (lines[y][x] == '#')
                     map[v] = true;
             }
-            
+
             for (var i = 0; i < 6; i++)
                 Sim();
-            
+
             Console.Out.WriteLine(map.data.Count(x => x));
 
             void Sim()
@@ -66,7 +215,7 @@ namespace aoc
             var sizeY = lines.Length + 14;
             var sizeZ = 1 + 14;
             var dv = new V3(7, 7, 7);
-            
+
             var map = new Map3<bool>(sizeX, sizeY, sizeZ);
             var map2 = new Map3<bool>(sizeX, sizeY, sizeZ);
 
