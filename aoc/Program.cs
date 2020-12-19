@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace aoc
 {
@@ -15,6 +16,112 @@ namespace aoc
 
             long res = 0;
             Console.Out.WriteLine(res);
+        }
+        
+        static void Main_19_2()
+        {
+            var input = File.ReadAllText("/Users/spaceorc/Downloads/input.txt")
+                .Split("\n\n");
+
+            var sources = input[0].Split('\n')
+                .Select(x => x.Split(new []{": "}, StringSplitOptions.RemoveEmptyEntries))
+                .ToDictionary(x => x[0], x => x[1].Replace("\"", ""));
+
+            // 0: 8 11
+            // 8: 42 | 42 8
+            // 11: 42 31 | 42 11 31
+            sources["8"] = "42 | 42 8";
+            sources["11"] = "42 31 | 42 11 31";
+            
+            var rules = new Dictionary<string, string>();
+            foreach (var (key, _) in sources)
+            {
+                if (key == "0" || key == "8" || key == "11")
+                    continue;
+                Parse(key);
+            }
+            
+            var re42 = new Regex($"^(?<g42>{rules["42"]})+", RegexOptions.Compiled);
+            var re31 = new Regex($"(?<g31>{rules["31"]})+$", RegexOptions.Compiled);
+            var messages = input[1].Split('\n');
+            long res = 0;
+            foreach (var message in messages)
+            {
+                var m42 = re42.Matches(message).SingleOrDefault();
+                var m31 = re31.Matches(message).SingleOrDefault();
+                if (m42 == null || m31 == null)
+                    continue;
+                
+                var c42 = m42.Groups["g42"].Captures.Count;
+                var c31 = m31.Groups["g31"].Captures.Count;
+
+                if (m42.Value + m31.Value == message && c42 > c31)
+                    res++;
+            }
+            
+            Console.Out.WriteLine(res);
+
+            string Parse(string key)
+            {
+                if (rules.TryGetValue(key, out var rule))
+                    return rule;
+
+                var source = sources[key];
+                if (char.IsLetter(source[0]))
+                {
+                    rules[key] = source;
+                    return source;
+                }
+
+                var parts = source.Split(" | ");
+                rule = string.Join("|", parts.Select(part => $"{string.Join("", part.Split(" ").Select(Parse))}"));
+                if (parts.Length > 1)
+                    rule = $"({rule})";
+                
+                rules[key] = rule;
+                return rule;
+            }
+        }
+
+        static void Main_19_1()
+        {
+            var input = File.ReadAllText("day19.txt")
+                .Split("\n\n");
+
+            var sources = input[0].Split('\n')
+                .Select(x => x.Split(new []{": "}, StringSplitOptions.RemoveEmptyEntries))
+                .ToDictionary(x => x[0], x => x[1].Replace("\"", ""));
+            
+            var rules = new Dictionary<string, string>();
+            foreach (var (key, _) in sources)
+                Parse(key);
+
+            var re = new Regex($"^{rules["0"]}$", RegexOptions.Compiled);
+            var messages = input[1].Split('\n');
+
+            Console.Out.WriteLine((long) messages.Count(message => re.IsMatch(message)));
+
+            string Parse(string key)
+            {
+                if (rules.TryGetValue(key, out var rule))
+                    return rule;
+
+                var source = sources[key];
+                if (char.IsLetter(source[0]))
+                {
+                    rules[key] = source;
+                    return source;
+                }
+
+                var parts = source.Split(" | ");
+                rule = string.Join("|", parts.Select(part => $"{string.Join("", part.Split(" ").Select(Parse))}"));
+                if (parts.Length > 1)
+                    rule = $"({rule})";
+                
+                
+                rules[key] = rule;
+                return rule;
+            }
         }
 
         static void Main_18_2()
