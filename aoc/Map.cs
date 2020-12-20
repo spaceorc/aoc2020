@@ -7,7 +7,12 @@ namespace aoc
         public readonly int sizeX;
         public readonly int sizeY;
         public readonly int totalCount;
-        private readonly T[] data;
+        public readonly T[] data;
+
+        public Map(int size)
+            : this(size, size)
+        {
+        }
 
         public Map(int sizeX, int sizeY)
         {
@@ -37,6 +42,13 @@ namespace aoc
         public void Fill(T value)
         {
             Array.Fill(data, value);
+        }
+
+        public Map<T> Clone()
+        {
+            var clone = new Map<T>(sizeX, sizeY);
+            Array.Copy(data, clone.data, totalCount);
+            return clone;
         }
     }
 }

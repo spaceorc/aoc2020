@@ -18,13 +18,400 @@ namespace aoc
             Console.Out.WriteLine(res);
         }
         
+        static void Main_20_2()
+        {
+            // output of part 1
+            var image = @"
+.............#....#..#.....#..####.##.#.......#.....#.#.....###..............#.....##.#...#...##
+..#..#......#.###...#.#..##..#....#.##....##......#.#.#..#..##.#........#......#...#.#.#......##
+...#.#...#....#.#..#.......#.#..###.###.#####.#...#..#...##...#....##...#.#..###.#............##
+.##..#...#..##....####......##.#.#....#.###...#####........#.#..##.......##......#.#...#..#..#..
+......#........#...#.#..#..###.#......#..#.#...............##.#.#...#.#####.##.###..#...#...#...
+.#........#.......#..#..#..##..##......##....##..##.#.....##.#........##.....#......#......##...
+.##.#..#..#..#...........#....###..#.##..#..###....#......##....#.....#...#..........#.##.......
+.##..##.......#.#.............#..#........#.######......#....#..##...##....###.#.........#..####
+.##......#.###....#..#...###.#..###........######...#...#..###....##.#.#..#..#.....#.##..#.##...
+#.#.....##..##.....#....##......#........#.#.....#.#....#.#..#...#...#............##..#...#..#..
+..#..#.##....###...#..#...#...##......#.###.......#........#..#.....##.#.....#....#...###.##....
+...#.....#.#..##.##..........#.##...#..#..........#..#..#..##.#......##.......#..#....##..#.....
+...#...##..#...#..#.........#.##.#.....#...##.#.#..#..#.#.#..#.....##.#........#...#...#........
+...##.....##...###...........##......#......#...##...#..#..###...#...##...#....#...#.##..#....#.
+#.#...#...........##...##...#...#..#.##....##.#...#...#.....#....#.........#....#.##.#.#...##..#
+.#.#....#.##.#.#..##...###...........#..#..#........#.#..###..#.#...#..#.##.#..#.....#.##.......
+....#.##...#...###.#.###.#..#.#....#....#.##..#.......#..#.###....#..#......###...#...#.#..#...#
+..#.##.#.#####.#.##.#.##....#.##.....................#.....#.#.......##...####.#...##..#........
+###.#....#....##...##.......#.##.#......#.##......#.......#.#........##.....##......###..#..#...
+.#...#.....#.........##....#..#.#...###..#..#.#..##..##...#.......#####..#.#...#.#.........###..
+#..#......#.#.#...##........#.......#....#..#..#..#..#.......#...#...#.#.#..###.#..#.....#..####
+#....##...#........#.....................#.#.#.#.....#....##..#..##.##...#....#..##..###.#.##...
+....##...##..#.....##...###.#.#.##.......#.............#..##..#......##....#.#.............##.#.
+......##...##..#.#..........#..#.#.#..........#.#...##...#...#.#..#.###.....#..#...#.###.#..##..
+#.......#.#.#......#.........#....#.#...#..#..####......##...#.........#.#..#...#.#..#..##.#.#.#
+##........#....#..........#.##....#..#...##.#.#.#..#.#....####..#.....#.#.##.#..#......#..##..#.
+####.........##..#......##...#..#.............##.......#...#..#.....#........##......#......#...
+..#.#....#...#..##.##.#..#...#.#......#..#.........###.#.......##.........##..#.##.#.#.#..###...
+..###.##.......#..#....#.##.##.........#.#........#....#..#..........##..###.##.##..####...#.#..
+.......#..#..#..#..#....#.......##....#......#.#..##.#....#.#..###..#.#...###...##.###.##.#.##.#
+.#............#......#..#.#.....#...#..##.###..##.......#.##.#.##..##...###.#.#.....##.##..#...#
+#..##.....#...##.#..#......#..##..#....##....#..#.#..#........##.##..##....#....#...#......#.##.
+.....###..####.##.#.....#.####.##.#.#..........#...#.##.#.....##.....#....##..#.......##..#.#...
+.#..#...#...#.##..#.....#....#.###.#........####..#.#.....#...###......#....##.....##...#.###.##
+..#..#.#.......#...#..#....#...#...#.#.#.##...####.......##.##..#...#.##...#..#.#....#.#...###..
+....###.....#...#....###....#.##.#...#.......####........#.#..#.......##....#.#..##.##...##...#.
+..#....#...#..#...........#.........#..#.....#.##..#.#...###...#...#....##....##....###......#..
+.##.#..##....#.###..#.#....#.###..............#.#.#.#.#.##.#..###....#...#...##.....#.####.###..
+#.#...#.....#.#.##....#....#.##.#..#....##.....#........#..##.##.#.......##......#....#..#.##...
+##....##.......##....###.....#....#.......#..............#......##.#.##.............##..........
+.#..#.######.#.##.##..#.....#..##.##.#...##....#..#...#.......#...#..#.#.......#....##.....#.#..
+....#.###.##...###.#.##..##.......#.......##...##..#..#.#...#.#........#..#..........#...#....##
+#..#..#.#.....#.......#####.##..#..#..#..#...#..##.#.....#...#.##.#.####.....#...####....##.#...
+###.#.....##.......####..#..#.###...#.#..##......#.####..#.....#...##..##.#.#.##.........#.....#
+#...#....#.#..#.#.#..#.#.....#...#...........##.......#.#.....#..#.....##......#.#..#...#.......
+#.....#...#.#.#...#...#.####.#.............##...#.....#....#.....#..#.##......##....#.##....#...
+...#...#.....#.##..#..#..##.#.#........##...####.....##.#.#..#.#..........#.....#.#.##.....#....
+#...####....#.##..#..#..##...#..##..........#....#.#....#.....#..##..#.#...#.#####..#..###...#..
+.##...#.#.#...#..##..##..........#.....#...#..#.....##.#.#.###.#...####.....#.##.##...#..#..#...
+.#.##...........#....#.#.#..#.##....#.#.##.##....#...#.#.#.#...##....###..#..#.#..#..#..#####..#
+#...##.......#.##.##.#.......##....##.##........#....#####.......#...####.#..##.#....#..#...###.
+......#.......#.#.#.#.#....#.##.#.#...#....#.##.#....#....#.##........#.....#...#...#....##.#...
+.#.#...#..#....#......#...####..#....#....###..#.#.##...#.##...#......#..#..#..#.....######...#.
+.#....##.......#....##.......#.#............##.#...#.#.##....#..#....#..#.#.....#.......#..#....
+..#.###.....####.#.......##.#.#.#.#.#.##...##.......#....#......#.....#....#.#..###......#.##...
+......#..#............##..#.##....#..#.###..#...#.....#..#..#.....#..#.#.......##...#...###..#..
+#.#....#..#.....###..###..#.##....#..###.#.......#.#.......#.#.....#...#.....#.#..#.....##......
+.....##.#....###....#.#...#...#...#...#..#.#.##....#..#..#....#.##.#..#..#..##.#..........##....
+#.#..###.......##.##..###.###..##....#.##...#..#.#..#.#.#......#....##.#.......#.#..#...#....#..
+...#####........#.#.##.#...............#.#.###..#.###......#..#..........#.....#..#.....#.#.....
+#...#.#..#........#.....#.......#.#.#.#...##..#........#.##.#.....#..##.##......#....#.###...#..
+#....#.......##...#..#..............##............#.#...#...........####......#.#.##.#.#....#..#
+.#.....##.###..#..#.#...#...###..#...###.#.....##..#...........#........#.....##.........##..##.
+#.#....##...........#...#........##.#.#.#..#...#.#..#.######..............#.####..#.#...###..##.
+......##..#.....#....#...#.##.....####..#...#...#.#...###.#.#...###........##.....#.#.......##..
+#..#.###..##..#....#......#..###.#...##.#..##....##..###.#.#...#..##....##.###.#....#........#..
+#..#.#........##..#..###..#.#.#.........###........####..#.#..#.#.#......#.#..#.#......##..##..#
+.#......##....#.##.##...........#.#..#.........#...##......##.#.##....#...##....##.#...#.#....#.
+#....###.##..#.#.####.......##...#...##.#...#.........#...###...#..##.#.#...##.#...#..#.#...#...
+###..#.#.#.......##.###.....#..#....#.........#.#.#.##..#..#.##.#..#....##.....#....#....##...#.
+....#..#......#.#..#....#.#.##.#.#.............#.#....#...#.##.###......#.#...#.....#....##.....
+.#..#.#.#..#.#..##..#..#####....##...#.#.....#...#...###..##..#...#........#.#.#.#..#.....#.....
+.#....#..#.####.#....#.#..#..#.......##...##.......#.#...#.#..#...##.##.#.##..#######...##..####
+..#..##..###.##.#...#...###..#......#...#.....#.#.#...###.#.....##........#................#....
+...#..##.....#...#........#....#..#...####....##.##.##.#...#...#.##.#..........##............#..
+.......#.#.....#.##...#....#..#..#..#...#.......##.#.#..##.#..#........#.....#.....#........#..#
+.......#....#..#...#..##.#.#..#.#..#.#.###.......#..###.#.####...#....##.##..##.#.........#.....
+...#..#.#...##....#..##...##......##.....#.#...#...#.##....#..#...#..###.###....#....#.#.#....#.
+##...##...#..##.....#.....#.....#..###......#........#..#.....#..##...#.##.#...#...#.#.##.###...
+##.#..#....##.#..##.#.#..#....#......#.#.....#..#####...#.#......#..#.###.#.##.#.#......####...#
+......#......##.#..#.#.......#...#..#.#.#..##........#.#...#..#.##..#.##......#.......#.#...#.#.
+..###..###.#..#....#..#.##..##.......#..##....#....#.#..#..#..#...#....#.#.#.#.#.#....###....###
+.#.#.#.#...###.....#....##..#..#..#.#..#..#.....#.#...#...#......#.#..#...#.#.#..........#.#....
+.#..#..###...#.........#..#..........#.....#.#...#....##..#.......#........#.#.####.#..#...#..#.
+..##..#....#..#.......#...#....#.#..#....#...###.#.##..#.#.##...##.#..........#..#......##.#....
+...##....#......#.#......#........#....##.#.#......#..##..#.#.......#...##.....#...#........#.#.
+#......#.....#.....#.#....##.#...#.#....#....#...#..#....###..#.......#............##.##.##..###
+.....#....#.#...##.#..#....##.......##..###.#....#..##.#..#...#..##....#.#..#....#...##......#.#
+#....#....#.#.#.#.#....#.##.....#..#...#.....#..###.##.##....##.##.....#..##...#....#....#......
+...............#.#.##.....#....#..#......##.#..............##....#..##...#.#.#..##......#.#...##
+..#.#....#..........##...#......##.#..#.......####....#..####.....###.#.......#.##.....#.#......
+#...#..###..#..#.....#.##.....##...#.#.#.#..##.#..#..#..#.........#........###..##...#....#..#..
+..#..#...#.#.##.....#..#.#.....#.....####.#.#...#.......##..#.#.##.......#...#.........#.#....#.
+....##.#.......#.....#.#..##...#..#......#..#..#...#.#.#.....##......#.....##.#......#.##.##.##.
+#.#.....#........##...#..###.##.##.....#...........#.#...#.......#..#......#.#................#.
+.....#........#.....##.#....##.###.#......#####.#.#....##...#....#.........##.###..#............"
+                .Trim('\n')
+                .Split('\n');
+
+            var patternImage = @"
+                  # 
+#    ##    ##    ###
+ #  #  #  #  #  #   
+".Trim('\n').Split('\n');
+
+            var size = image.Length;
+            var original = new Map<bool>(image.Length);
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+                original[new V(x, y)] = image[y][x] == '#';
+
+            var pattern = new Map<bool>(patternImage[0].Length, patternImage.Length);
+            for (int y = 0; y < patternImage.Length; y++)
+            for (int x = 0; x < patternImage[0].Length; x++)
+                pattern[new V(x, y)] = patternImage[y][x] == '#';
+
+
+            for (int orientation = 0; orientation < 8; orientation++)
+            {
+                var map = GetMapOrientation(original, orientation);
+                var count = 0;
+                while (FindAndClearPattern(map))
+                    count++;
+
+                if (count > 0)
+                {
+                    Console.Out.WriteLine(count);
+                    Console.Out.WriteLine(map.data.Count(x => x));
+                    return;
+                }
+            }
+
+            bool FindAndClearPattern(Map<bool> map)
+            {
+                for (int y = 0; y <= size - pattern.sizeY; y++)
+                for (int x = 0; x <= size - pattern.sizeX; x++)
+                {
+                    var v = new V(x, y);
+                    var found = true;
+                    for (int py = 0; py < pattern.sizeY && found; py++)
+                    for (int px = 0; px < pattern.sizeX; px++)
+                    {
+                        var pv = new V(px, py);
+                        if (pattern[pv] && !map[v + pv])
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                    {
+                        for (int py = 0; py < pattern.sizeY && found; py++)
+                        for (int px = 0; px < pattern.sizeX; px++)
+                        {
+                            var pv = new V(px, py);
+                            if (pattern[pv])
+                                map[v + pv] = false;
+                        }
+
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            Map<bool> GetMapOrientation(Map<bool> map, int variantIndex)
+            {
+                for (int i = 0; i < variantIndex % 4; i++)
+                    map = RotateMapOnce(map);
+                if (variantIndex >= 4)
+                    map = FlipMapOnce(map);
+                return map;
+            }
+
+
+            Map<bool> RotateMapOnce(Map<bool> map)
+            {
+                var res = new Map<bool>(size);
+                for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                    res[new V(x, y)] = map[new V(size - y - 1, x)];
+
+                return res;
+            }
+
+            Map<bool> FlipMapOnce(Map<bool> map)
+            {
+                var res = new Map<bool>(size);
+                for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                    res[new V(x, y)] = map[new V(y, x)];
+
+                return res;
+            }
+        }
+
+        static void Main_20_1()
+        {
+            var tiles = File.ReadAllText("day20.txt")
+                .Split("\n\n", StringSplitOptions.RemoveEmptyEntries)
+                .Select(ParseTile)
+                .ToDictionary(x => x.id,
+                    x => x.variants.Select((variant, variantIndex) => (variant, variantIndex,
+                        tileImage: GetTileImageVariant(x.tileImage, variantIndex))).ToArray());
+
+            var complements = tiles.Values
+                .SelectMany(x => x.SelectMany(t => t.variant))
+                .Distinct()
+                .ToDictionary(x => x, GetComplement);
+
+            var tilesByComplement = tiles
+                .SelectMany(x => x.Value.SelectMany(t => t.variant.Select(complement => (id: x.Key, complement))))
+                .ToLookup(x => x.complement, x => x.id)
+                .ToDictionary(x => x.Key, x => x.Distinct().ToArray());
+
+            var size = (int) Math.Sqrt(tiles.Count);
+            var image = new Map<(long id, int[] variant, int variantIndex)>(size);
+
+            var freeTiles = tiles.Select(x => x.Key).ToHashSet();
+
+            /*     0
+             *   +---+
+             * 3 |   | 1
+             *   +---+
+             *     2
+             */
+            var shifts = new[] {new V(0, -1), new V(1, 0), new V(0, 1), new V(-1, 0)};
+            if (!TryPlace(new V(0, 0)))
+                throw new Exception("WTF???");
+
+            for (int y = 0; y < size; y++)
+            for (int yy = 0; yy < 8; yy++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    var tileImage = tiles[image[new V(x, y)].id][image[new V(x, y)].variantIndex].tileImage;
+                    for (int xx = 0; xx < 8; xx++)
+                        Console.Out.Write(tileImage[new V(xx, yy)] ? "#" : ".");
+                }
+
+                Console.Out.WriteLine();
+            }
+
+
+            Console.Out.WriteLine(image[new V(0, 0)].id
+                                  * image[new V(size - 1, 0)].id
+                                  * image[new V(0, size - 1)].id
+                                  * image[new V(size - 1, size - 1)].id);
+
+            bool TryPlace(V v)
+            {
+                if (v.Y >= size)
+                    return true;
+                foreach (var tile in GetFittingTiles(v))
+                {
+                    freeTiles.Remove(tile.id);
+                    image[v] = tile;
+                    var next = v.X < size - 1 ? v + shifts[1] : new V(0, v.Y + 1);
+                    if (TryPlace(next))
+                        return true;
+                    freeTiles.Add(tile.id);
+                }
+
+                return false;
+            }
+
+            List<(long id, int[] variant, int variantIndex)> GetFittingTiles(V v)
+            {
+                var topComplements = v.Y > 0 ? tilesByComplement[image[v + shifts[0]].variant[2]] : null;
+                var leftComplements = v.X > 0 ? tilesByComplement[image[v + shifts[3]].variant[1]] : null;
+
+                var candidates = topComplements == null && leftComplements == null ? freeTiles
+                    : topComplements == null ? leftComplements.Where(freeTiles.Contains)
+                    : leftComplements == null ? topComplements.Where(freeTiles.Contains)
+                    : leftComplements.Intersect(topComplements).Intersect(freeTiles);
+
+                var result = new List<(long id, int[] variant, int variantIndex)>();
+                foreach (var id in candidates)
+                {
+                    var variants = tiles[id];
+                    foreach (var variant in variants)
+                    {
+                        if (v.Y > 0 && variant.variant[0] != complements[image[v + shifts[0]].variant[2]])
+                            continue;
+                        if (v.X > 0 && variant.variant[3] != complements[image[v + shifts[3]].variant[1]])
+                            continue;
+
+                        result.Add((id, variant.variant, variant.variantIndex));
+                    }
+                }
+
+                return result;
+            }
+
+            static int GetComplement(int value)
+            {
+                var result = 0;
+                var bit = 1;
+                for (int i = 0; i < 10; i++, bit <<= 1)
+                {
+                    result <<= 1;
+                    if ((value & bit) != 0)
+                        result |= 1;
+                }
+
+                return result;
+            }
+
+            Map<bool> RotateTileImageOnce(Map<bool> tileImage)
+            {
+                var res = new Map<bool>(8);
+                for (int y = 0; y < 8; y++)
+                for (int x = 0; x < 8; x++)
+                    res[new V(x, y)] = tileImage[new V(8 - y - 1, x)];
+
+                return res;
+            }
+
+            Map<bool> FlipTileImageOnce(Map<bool> tileImage)
+            {
+                var res = new Map<bool>(8);
+                for (int y = 0; y < 8; y++)
+                for (int x = 0; x < 8; x++)
+                    res[new V(x, y)] = tileImage[new V(y, x)];
+
+                return res;
+            }
+
+            Map<bool> GetTileImageVariant(Map<bool> tileImage, int variantIndex)
+            {
+                for (int i = 0; i < variantIndex % 4; i++)
+                    tileImage = RotateTileImageOnce(tileImage);
+                if (variantIndex >= 4)
+                    tileImage = FlipTileImageOnce(tileImage);
+                return tileImage;
+            }
+
+            static (long id, List<int[]> variants, Map<bool> tileImage) ParseTile(string tile)
+            {
+                var lines = tile.Split('\n');
+                var id = long.Parse(lines[0].Split(new[] {":", " "}, StringSplitOptions.RemoveEmptyEntries)[1]);
+                lines = lines.Skip(1).ToArray();
+
+                var tileImage = new Map<bool>(8);
+                for (int y = 1; y <= 8; y++)
+                for (int x = 1; x <= 8; x++)
+                    tileImage[new V(x - 1, y - 1)] = lines[y][x] == '#';
+
+                var variant = new[]
+                {
+                    Convert.ToInt32(lines[0].Replace(".", "0").Replace("#", "1"), 2),
+                    Convert.ToInt32(
+                        string.Join("", lines.Select(line => line.Last())).Replace(".", "0").Replace("#", "1"), 2),
+                    GetComplement(Convert.ToInt32(lines.Last().Replace(".", "0").Replace("#", "1"), 2)),
+                    GetComplement(Convert.ToInt32(
+                        string.Join("", lines.Select(line => line.First())).Replace(".", "0").Replace("#", "1"), 2))
+                };
+
+                var variants = new List<int[]>
+                {
+                    variant,
+                    Rotate(variant),
+                    Rotate(Rotate(variant)),
+                    Rotate(Rotate(Rotate(variant))),
+                };
+
+                variants.AddRange(variants.ToArray().Select(v => v.Reverse().Select(GetComplement).ToArray()));
+
+                int[] Rotate(int[] src)
+                {
+                    var res = new int[src.Length];
+                    for (int i = 0; i < src.Length - 1; i++)
+                        res[i] = src[i + 1];
+                    res[^1] = src[0];
+                    return res;
+                }
+
+                return (id, variants, tileImage);
+            }
+        }
+
         static void Main_19_2()
         {
-            var input = File.ReadAllText("/Users/spaceorc/Downloads/input.txt")
+            var input = File.ReadAllText("day19.txt")
                 .Split("\n\n");
 
             var sources = input[0].Split('\n')
-                .Select(x => x.Split(new []{": "}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(x => x.Split(new[] {": "}, StringSplitOptions.RemoveEmptyEntries))
                 .ToDictionary(x => x[0], x => x[1].Replace("\"", ""));
 
             // 0: 8 11
@@ -32,7 +419,7 @@ namespace aoc
             // 11: 42 31 | 42 11 31
             sources["8"] = "42 | 42 8";
             sources["11"] = "42 31 | 42 11 31";
-            
+
             var rules = new Dictionary<string, string>();
             foreach (var (key, _) in sources)
             {
@@ -40,7 +427,7 @@ namespace aoc
                     continue;
                 Parse(key);
             }
-            
+
             var re42 = new Regex($"^(?<g42>{rules["42"]})+", RegexOptions.Compiled);
             var re31 = new Regex($"(?<g31>{rules["31"]})+$", RegexOptions.Compiled);
             var messages = input[1].Split('\n');
@@ -51,14 +438,14 @@ namespace aoc
                 var m31 = re31.Matches(message).SingleOrDefault();
                 if (m42 == null || m31 == null)
                     continue;
-                
+
                 var c42 = m42.Groups["g42"].Captures.Count;
                 var c31 = m31.Groups["g31"].Captures.Count;
 
                 if (m42.Value + m31.Value == message && c42 > c31)
                     res++;
             }
-            
+
             Console.Out.WriteLine(res);
 
             string Parse(string key)
@@ -77,7 +464,7 @@ namespace aoc
                 rule = string.Join("|", parts.Select(part => $"{string.Join("", part.Split(" ").Select(Parse))}"));
                 if (parts.Length > 1)
                     rule = $"({rule})";
-                
+
                 rules[key] = rule;
                 return rule;
             }
@@ -89,9 +476,9 @@ namespace aoc
                 .Split("\n\n");
 
             var sources = input[0].Split('\n')
-                .Select(x => x.Split(new []{": "}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(x => x.Split(new[] {": "}, StringSplitOptions.RemoveEmptyEntries))
                 .ToDictionary(x => x[0], x => x[1].Replace("\"", ""));
-            
+
             var rules = new Dictionary<string, string>();
             foreach (var (key, _) in sources)
                 Parse(key);
@@ -117,8 +504,8 @@ namespace aoc
                 rule = string.Join("|", parts.Select(part => $"{string.Join("", part.Split(" ").Select(Parse))}"));
                 if (parts.Length > 1)
                     rule = $"({rule})";
-                
-                
+
+
                 rules[key] = rule;
                 return rule;
             }
