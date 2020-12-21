@@ -500,7 +500,8 @@ namespace aoc
                     continue;
                 Parse(key);
             }
-
+            
+            // old way - count manually
             var re42 = new Regex($"^(?<g42>{rules["42"]})+", RegexOptions.Compiled);
             var re31 = new Regex($"(?<g31>{rules["31"]})+$", RegexOptions.Compiled);
             var messages = input[1].Split('\n');
@@ -519,6 +520,16 @@ namespace aoc
                     res++;
             }
 
+            Console.Out.WriteLine(res);
+
+            // new way - use balancing groups
+            var re = new Regex($"^({rules["42"]})+(?'open'{rules["42"]})+(?'close-open'{rules["31"]})+$", RegexOptions.Compiled);
+            res = 0;
+            foreach (var message in messages)
+            {
+                if (re.IsMatch(message))
+                    res++;
+            }
             Console.Out.WriteLine(res);
 
             string Parse(string key)
