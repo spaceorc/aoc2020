@@ -13,9 +13,82 @@ namespace aoc
             var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
                 .Select(long.Parse)
                 .ToArray();
-
+            
             long res = 0;
             Console.Out.WriteLine(res);
+        }
+        
+        static void Main_21_2()
+        {
+            var lines = File.ReadAllLines("day21.txt")
+                .Select(x => x.Split("(contains").Select(s => s.Split(new[]{" ", ",", ")"}, StringSplitOptions.RemoveEmptyEntries)).ToArray())
+                .Select(x => (ingredients: x[0], allergens: x[1]))
+                .ToArray();
+
+            var allAllergens = lines.SelectMany(x => x.allergens).Distinct().ToArray();
+            var allIngredients = lines.SelectMany(x => x.ingredients).Distinct().ToArray();
+            
+            var matches = new Dictionary<string, string[]>();
+            foreach (var allergen in allAllergens)
+            {
+                var ingredients = lines
+                    .Where(l => l.allergens.Contains(allergen))
+                    .Select(x => x.ingredients)
+                    .Aggregate(allIngredients, (a, b) => a.Intersect(b).ToArray());
+
+                matches[allergen] = ingredients;
+            }
+
+            var resultMatches = new Dictionary<string, string>();
+
+            while (true)
+            {
+                var found = false;
+                foreach (var (allergen, ingredients) in matches)
+                {
+                    if (ingredients.Length == 1)
+                    {
+                        found = true;
+                        resultMatches[allergen] = ingredients[0];
+                    }
+                }
+
+                if (!found)
+                    break;
+
+                matches = matches
+                    .ToDictionary(
+                        x => x.Key, 
+                        x => x.Value.Except(resultMatches.Values).ToArray());
+            }
+
+            Console.Out.WriteLine(string.Join(",", resultMatches.OrderBy(x => x.Key).Select(x => x.Value)));
+        }
+
+        static void Main_21_1()
+        {
+            var lines = File.ReadAllLines("day21.txt")
+                .Select(x => x.Split("(contains").Select(s => s.Split(new[]{" ", ",", ")"}, StringSplitOptions.RemoveEmptyEntries)).ToArray())
+                .Select(x => (ingredients: x[0], allergens: x[1]))
+                .ToArray();
+
+            var allAllergens = lines.SelectMany(x => x.allergens).Distinct().ToArray();
+            var allIngredients = lines.SelectMany(x => x.ingredients).Distinct().ToArray();
+
+            var dangerousIngredients = new HashSet<string>();
+            foreach (var allergen in allAllergens)
+            {
+                var ingredients = lines
+                    .Where(l => l.allergens.Contains(allergen))
+                    .Select(x => x.ingredients)
+                    .Aggregate(allIngredients, (a, b) => a.Intersect(b).ToArray());
+                
+                dangerousIngredients.UnionWith(ingredients);
+            }
+
+            Console.Out.WriteLine(lines
+                .SelectMany(x => x.ingredients)
+                .Count(x => !dangerousIngredients.Contains(x)));
         }
         
         static void Main_20_2()
@@ -304,14 +377,14 @@ namespace aoc
                 foreach (var id in candidates)
                 {
                     var variants = tiles[id];
-                    foreach (var variant in variants)
+                    foreach (var (variant, variantIndex, _) in variants)
                     {
-                        if (v.Y > 0 && variant.variant[0] != complements[image[v + shifts[0]].variant[2]])
+                        if (v.Y > 0 && variant[0] != complements[image[v + shifts[0]].variant[2]])
                             continue;
-                        if (v.X > 0 && variant.variant[3] != complements[image[v + shifts[3]].variant[1]])
+                        if (v.X > 0 && variant[3] != complements[image[v + shifts[3]].variant[1]])
                             continue;
 
-                        result.Add((id, variant.variant, variant.variantIndex));
+                        result.Add((id, variant, variantIndex));
                     }
                 }
 
