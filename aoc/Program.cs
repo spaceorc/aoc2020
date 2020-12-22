@@ -90,13 +90,15 @@ namespace aoc
         static void Main_21_2()
         {
             var lines = File.ReadAllLines("day21.txt")
-                .Select(x => x.Split("(contains").Select(s => s.Split(new[]{" ", ",", ")"}, StringSplitOptions.RemoveEmptyEntries)).ToArray())
+                .Select(x =>
+                    x.Split("(contains")
+                        .Select(s => s.Split(new[] {" ", ",", ")"}, StringSplitOptions.RemoveEmptyEntries)).ToArray())
                 .Select(x => (ingredients: x[0], allergens: x[1]))
                 .ToArray();
 
             var allAllergens = lines.SelectMany(x => x.allergens).Distinct().ToArray();
             var allIngredients = lines.SelectMany(x => x.ingredients).Distinct().ToArray();
-            
+
             var matches = new Dictionary<string, string[]>();
             foreach (var allergen in allAllergens)
             {
@@ -127,7 +129,7 @@ namespace aoc
 
                 matches = matches
                     .ToDictionary(
-                        x => x.Key, 
+                        x => x.Key,
                         x => x.Value.Except(resultMatches.Values).ToArray());
             }
 
@@ -137,7 +139,9 @@ namespace aoc
         static void Main_21_1()
         {
             var lines = File.ReadAllLines("day21.txt")
-                .Select(x => x.Split("(contains").Select(s => s.Split(new[]{" ", ",", ")"}, StringSplitOptions.RemoveEmptyEntries)).ToArray())
+                .Select(x =>
+                    x.Split("(contains")
+                        .Select(s => s.Split(new[] {" ", ",", ")"}, StringSplitOptions.RemoveEmptyEntries)).ToArray())
                 .Select(x => (ingredients: x[0], allergens: x[1]))
                 .ToArray();
 
@@ -151,7 +155,7 @@ namespace aoc
                     .Where(l => l.allergens.Contains(allergen))
                     .Select(x => x.ingredients)
                     .Aggregate(allIngredients, (a, b) => a.Intersect(b).ToArray());
-                
+
                 dangerousIngredients.UnionWith(ingredients);
             }
 
@@ -159,7 +163,7 @@ namespace aoc
                 .SelectMany(x => x.ingredients)
                 .Count(x => !dangerousIngredients.Contains(x)));
         }
-        
+
         static void Main_20_2()
         {
             // output of part 1
@@ -271,17 +275,17 @@ namespace aoc
 
             var size = image.Length;
             var original = new Map<bool>(image.Length);
-            for (int y = 0; y < size; y++)
-            for (int x = 0; x < size; x++)
+            for (var y = 0; y < size; y++)
+            for (var x = 0; x < size; x++)
                 original[new V(x, y)] = image[y][x] == '#';
 
             var pattern = new Map<bool>(patternImage[0].Length, patternImage.Length);
-            for (int y = 0; y < patternImage.Length; y++)
-            for (int x = 0; x < patternImage[0].Length; x++)
+            for (var y = 0; y < patternImage.Length; y++)
+            for (var x = 0; x < patternImage[0].Length; x++)
                 pattern[new V(x, y)] = patternImage[y][x] == '#';
 
 
-            for (int orientation = 0; orientation < 8; orientation++)
+            for (var orientation = 0; orientation < 8; orientation++)
             {
                 var map = GetMapOrientation(original, orientation);
                 var count = 0;
@@ -298,13 +302,13 @@ namespace aoc
 
             bool FindAndClearPattern(Map<bool> map)
             {
-                for (int y = 0; y <= size - pattern.sizeY; y++)
-                for (int x = 0; x <= size - pattern.sizeX; x++)
+                for (var y = 0; y <= size - pattern.sizeY; y++)
+                for (var x = 0; x <= size - pattern.sizeX; x++)
                 {
                     var v = new V(x, y);
                     var found = true;
-                    for (int py = 0; py < pattern.sizeY && found; py++)
-                    for (int px = 0; px < pattern.sizeX; px++)
+                    for (var py = 0; py < pattern.sizeY && found; py++)
+                    for (var px = 0; px < pattern.sizeX; px++)
                     {
                         var pv = new V(px, py);
                         if (pattern[pv] && !map[v + pv])
@@ -316,8 +320,8 @@ namespace aoc
 
                     if (found)
                     {
-                        for (int py = 0; py < pattern.sizeY && found; py++)
-                        for (int px = 0; px < pattern.sizeX; px++)
+                        for (var py = 0; py < pattern.sizeY && found; py++)
+                        for (var px = 0; px < pattern.sizeX; px++)
                         {
                             var pv = new V(px, py);
                             if (pattern[pv])
@@ -333,7 +337,7 @@ namespace aoc
 
             Map<bool> GetMapOrientation(Map<bool> map, int variantIndex)
             {
-                for (int i = 0; i < variantIndex % 4; i++)
+                for (var i = 0; i < variantIndex % 4; i++)
                     map = RotateMapOnce(map);
                 if (variantIndex >= 4)
                     map = FlipMapOnce(map);
@@ -344,8 +348,8 @@ namespace aoc
             Map<bool> RotateMapOnce(Map<bool> map)
             {
                 var res = new Map<bool>(size);
-                for (int y = 0; y < size; y++)
-                for (int x = 0; x < size; x++)
+                for (var y = 0; y < size; y++)
+                for (var x = 0; x < size; x++)
                     res[new V(x, y)] = map[new V(size - y - 1, x)];
 
                 return res;
@@ -354,8 +358,8 @@ namespace aoc
             Map<bool> FlipMapOnce(Map<bool> map)
             {
                 var res = new Map<bool>(size);
-                for (int y = 0; y < size; y++)
-                for (int x = 0; x < size; x++)
+                for (var y = 0; y < size; y++)
+                for (var x = 0; x < size; x++)
                     res[new V(x, y)] = map[new V(y, x)];
 
                 return res;
@@ -396,13 +400,13 @@ namespace aoc
             if (!TryPlace(new V(0, 0)))
                 throw new Exception("WTF???");
 
-            for (int y = 0; y < size; y++)
-            for (int yy = 0; yy < 8; yy++)
+            for (var y = 0; y < size; y++)
+            for (var yy = 0; yy < 8; yy++)
             {
-                for (int x = 0; x < size; x++)
+                for (var x = 0; x < size; x++)
                 {
                     var tileImage = tiles[image[new V(x, y)].id][image[new V(x, y)].variantIndex].tileImage;
-                    for (int xx = 0; xx < 8; xx++)
+                    for (var xx = 0; xx < 8; xx++)
                         Console.Out.Write(tileImage[new V(xx, yy)] ? "#" : ".");
                 }
 
@@ -464,7 +468,7 @@ namespace aoc
             {
                 var result = 0;
                 var bit = 1;
-                for (int i = 0; i < 10; i++, bit <<= 1)
+                for (var i = 0; i < 10; i++, bit <<= 1)
                 {
                     result <<= 1;
                     if ((value & bit) != 0)
@@ -477,8 +481,8 @@ namespace aoc
             Map<bool> RotateTileImageOnce(Map<bool> tileImage)
             {
                 var res = new Map<bool>(8);
-                for (int y = 0; y < 8; y++)
-                for (int x = 0; x < 8; x++)
+                for (var y = 0; y < 8; y++)
+                for (var x = 0; x < 8; x++)
                     res[new V(x, y)] = tileImage[new V(8 - y - 1, x)];
 
                 return res;
@@ -487,8 +491,8 @@ namespace aoc
             Map<bool> FlipTileImageOnce(Map<bool> tileImage)
             {
                 var res = new Map<bool>(8);
-                for (int y = 0; y < 8; y++)
-                for (int x = 0; x < 8; x++)
+                for (var y = 0; y < 8; y++)
+                for (var x = 0; x < 8; x++)
                     res[new V(x, y)] = tileImage[new V(y, x)];
 
                 return res;
@@ -496,7 +500,7 @@ namespace aoc
 
             Map<bool> GetTileImageVariant(Map<bool> tileImage, int variantIndex)
             {
-                for (int i = 0; i < variantIndex % 4; i++)
+                for (var i = 0; i < variantIndex % 4; i++)
                     tileImage = RotateTileImageOnce(tileImage);
                 if (variantIndex >= 4)
                     tileImage = FlipTileImageOnce(tileImage);
@@ -510,8 +514,8 @@ namespace aoc
                 lines = lines.Skip(1).ToArray();
 
                 var tileImage = new Map<bool>(8);
-                for (int y = 1; y <= 8; y++)
-                for (int x = 1; x <= 8; x++)
+                for (var y = 1; y <= 8; y++)
+                for (var x = 1; x <= 8; x++)
                     tileImage[new V(x - 1, y - 1)] = lines[y][x] == '#';
 
                 var variant = new[]
@@ -537,7 +541,7 @@ namespace aoc
                 int[] Rotate(int[] src)
                 {
                     var res = new int[src.Length];
-                    for (int i = 0; i < src.Length - 1; i++)
+                    for (var i = 0; i < src.Length - 1; i++)
                         res[i] = src[i + 1];
                     res[^1] = src[0];
                     return res;
@@ -569,7 +573,7 @@ namespace aoc
                     continue;
                 Parse(key);
             }
-            
+
             // old way - count manually
             var re42 = new Regex($"^(?<g42>{rules["42"]})+", RegexOptions.Compiled);
             var re31 = new Regex($"(?<g31>{rules["31"]})+$", RegexOptions.Compiled);
@@ -592,13 +596,15 @@ namespace aoc
             Console.Out.WriteLine(res);
 
             // new way - use balancing groups
-            var re = new Regex($"^({rules["42"]})+(?'open'{rules["42"]})+(?'close-open'{rules["31"]})+$", RegexOptions.Compiled);
+            var re = new Regex($"^({rules["42"]})+(?'open'{rules["42"]})+(?'close-open'{rules["31"]})+$",
+                RegexOptions.Compiled);
             res = 0;
             foreach (var message in messages)
             {
                 if (re.IsMatch(message))
                     res++;
             }
+
             Console.Out.WriteLine(res);
 
             string Parse(string key)

@@ -43,10 +43,10 @@ namespace aoc
 
         public IEnumerable<V4> NearsAndSelf()
         {
-            for (int w = -1; w <= 1; w++)
-            for (int z = -1; z <= 1; z++)
-            for (int y = -1; y <= 1; y++)
-            for (int x = -1; x <= 1; x++)
+            for (var w = -1; w <= 1; w++)
+            for (var z = -1; z <= 1; z++)
+            for (var y = -1; y <= 1; y++)
+            for (var x = -1; x <= 1; x++)
                 yield return this + new V4(x, y, z, w);
         }
 

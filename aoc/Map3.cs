@@ -51,17 +51,17 @@ namespace aoc
 
         public IEnumerable<V3> RangeNoBorders()
         {
-            for (int z = 1; z < sizeZ - 1; z++)
-            for (int y = 1; y < sizeY - 1; y++)
-            for (int x = 1; x < sizeX - 1; x++)
+            for (var z = 1; z < sizeZ - 1; z++)
+            for (var y = 1; y < sizeY - 1; y++)
+            for (var x = 1; x < sizeX - 1; x++)
                 yield return new V3(x, y, z);
         }
 
         public IEnumerable<V3> Range()
         {
-            for (int z = 0; z < sizeZ; z++)
-            for (int y = 0; y < sizeY; y++)
-            for (int x = 0; x < sizeX; x++)
+            for (var z = 0; z < sizeZ; z++)
+            for (var y = 0; y < sizeY; y++)
+            for (var x = 0; x < sizeX; x++)
                 yield return new V3(x, y, z);
         }
     }
