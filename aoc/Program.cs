@@ -10,12 +10,13 @@ namespace aoc
     {
         static void Main()
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
-                .Select(long.Parse)
-                .ToArray();
-            
-            long res = 0;
-            Console.Out.WriteLine(res);
+            // var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
+            //     .Select(long.Parse)
+            //     .ToArray();
+            //
+            // long res = 0;
+            // Console.Out.WriteLine(res);
+            Main_22_2();
         }
 
         static void Main_22_2()
@@ -26,6 +27,7 @@ namespace aoc
                 .Select(x => new Queue<int>(x.Skip(1).Select(int.Parse)))
                 .ToArray();
 
+
             var winner = PlayGame(decks);
 
             Console.Out.WriteLine(decks[winner]
@@ -33,9 +35,10 @@ namespace aoc
                 .Select((card, i) => card * (i + 1))
                 .Sum());
 
+
             int PlayGame(params Queue<int>[] decks)
             {
-                var used = new HashSet<int>();
+                var used = new HashSet<string>();
                 while (decks.All(l => l.Count > 0))
                 {
                     var hash = CalcHash(decks);
@@ -55,12 +58,10 @@ namespace aoc
                 return decks[0].Count > 0 ? 0 : 1;
             }
 
-            static int CalcHash(params Queue<int>[] decks)
+            static string CalcHash(params Queue<int>[] decks)
             {
-                return HashCode.Combine(CalcDeckHash(decks[0]), CalcDeckHash(decks[1]));
+                return $"{string.Join(",", decks[0])}|{string.Join(",", decks[1])}";
             }
-
-            static int CalcDeckHash(Queue<int> deck) => deck.Aggregate(deck.Count, HashCode.Combine);
         }
 
         static void Main_22_1()
