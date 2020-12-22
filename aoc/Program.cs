@@ -36,7 +36,7 @@ namespace aoc
                 .Sum());
 
 
-            int PlayGame(params Queue<int>[] decks)
+            static int PlayGame(params Queue<int>[] decks)
             {
                 var used = new HashSet<string>();
                 while (decks.All(l => l.Count > 0))
