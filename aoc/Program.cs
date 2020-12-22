@@ -41,8 +41,7 @@ namespace aoc
                 var used = new HashSet<string>();
                 while (decks.All(l => l.Count > 0))
                 {
-                    var hash = CalcHash(decks);
-                    if (!used.Add(hash))
+                    if (!used.Add($"{string.Join(",", decks[0])}|{string.Join(",", decks[1])}"))
                         return 0;
 
                     var cards = decks.Select(x => x.Dequeue()).ToArray();
@@ -56,11 +55,6 @@ namespace aoc
                 }
 
                 return decks[0].Count > 0 ? 0 : 1;
-            }
-
-            static string CalcHash(params Queue<int>[] decks)
-            {
-                return $"{string.Join(",", decks[0])}|{string.Join(",", decks[1])}";
             }
         }
 
