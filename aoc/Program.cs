@@ -17,7 +17,76 @@ namespace aoc
             long res = 0;
             Console.Out.WriteLine(res);
         }
-        
+
+        static void Main_22_2()
+        {
+            var decks = File.ReadAllText("day22.txt")
+                .Split("\n\n")
+                .Select(x => x.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                .Select(x => new Queue<int>(x.Skip(1).Select(int.Parse)))
+                .ToArray();
+
+            var winner = PlayGame(decks);
+
+            Console.Out.WriteLine(decks[winner]
+                .Reverse()
+                .Select((card, i) => card * (i + 1))
+                .Sum());
+
+            int PlayGame(params Queue<int>[] decks)
+            {
+                var used = new HashSet<int>();
+                while (decks.All(l => l.Count > 0))
+                {
+                    var hash = CalcHash(decks);
+                    if (!used.Add(hash))
+                        return 0;
+
+                    var cards = decks.Select(x => x.Dequeue()).ToArray();
+                    var roundWinner = cards[0] > decks[0].Count || cards[1] > decks[1].Count
+                        ? cards[0] > cards[1] ? 0 : 1
+                        : PlayGame(
+                            new Queue<int>(decks[0].Take(cards[0])),
+                            new Queue<int>(decks[1].Take(cards[1])));
+                    decks[roundWinner].Enqueue(cards[roundWinner]);
+                    decks[roundWinner].Enqueue(cards[1 - roundWinner]);
+                }
+
+                return decks[0].Count > 0 ? 0 : 1;
+            }
+
+            static int CalcHash(params Queue<int>[] decks)
+            {
+                return HashCode.Combine(CalcDeckHash(decks[0]), CalcDeckHash(decks[1]));
+            }
+
+            static int CalcDeckHash(Queue<int> deck) => deck.Aggregate(deck.Count, HashCode.Combine);
+        }
+
+        static void Main_22_1()
+        {
+            var decks = File.ReadAllText("day22.txt")
+                .Split("\n\n")
+                .Select(x => x.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                .Select(x => new Queue<int>(x.Skip(1).Select(int.Parse)))
+                .ToArray();
+
+            while (decks.All(l => l.Count > 0))
+            {
+                var cards = decks.Select(x => x.Dequeue()).ToArray();
+                var roundWinner = cards[0] > cards[1] ? 0 : 1;
+                decks[roundWinner].Enqueue(cards[roundWinner]);
+                decks[roundWinner].Enqueue(cards[1 - roundWinner]);
+            }
+
+            var winnerDeck = decks.OrderByDescending(x => x.Count).First();
+
+            Console.Out.WriteLine(winnerDeck
+                .Reverse()
+                .Select((card, i) => card * (i + 1))
+                .Sum());
+        }
+
         static void Main_21_2()
         {
             var lines = File.ReadAllLines("day21.txt")
