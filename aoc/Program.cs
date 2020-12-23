@@ -10,13 +10,98 @@ namespace aoc
     {
         static void Main()
         {
-            // var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
-            //     .Select(long.Parse)
-            //     .ToArray();
-            //
-            // long res = 0;
-            // Console.Out.WriteLine(res);
-            Main_22_2();
+            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
+                .Select(long.Parse)
+                .ToArray();
+            
+            long res = 0;
+            Console.Out.WriteLine(res);
+        }
+
+        static void Main_23_2()
+        {
+            const string input = "247819356";
+
+            var nodes = new List<LinkedListNode<int>> {null};
+            var deck = new LinkedList<int>();
+            const int count = 1000000;
+            const int times = 10000000;
+            for (var i = 1; i <= count; i++)
+            {
+                deck.AddLast(i);
+                nodes.Add(deck.Last);
+            }
+
+            foreach (var c in input.Reverse())
+            {
+                deck.Remove(nodes[c - '0']);
+                deck.AddFirst(nodes[c - '0']);
+            }
+
+            var current = deck.First;
+            for (var i = 0; i < times; i++)
+            {
+                var next1 = current!.Next ?? deck.First;
+                var next2 = next1!.Next ?? deck.First;
+                var next3 = next2!.Next ?? deck.First;
+                var d = current.Value - 1;
+                if (d < 1)
+                    d = count;
+                while (next1.Value == d || next2.Value == d || next3.Value == d)
+                {
+                    d--;
+                    if (d < 1)
+                        d = count;
+                }
+
+                var dest = nodes[d];
+                deck.Remove(next1);
+                deck.Remove(next2);
+                deck.Remove(next3);
+                deck.AddAfter(dest, next1);
+                deck.AddAfter(next1, next2);
+                deck.AddAfter(next2, next3);
+                current = current!.Next ?? deck.First;
+            }
+
+            var n1 = nodes[1].Next ?? deck.First;
+            var n2 = n1!.Next ?? deck.First;
+            Console.Out.WriteLine((long)n1!.Value * n2!.Value);
+        }
+
+        static void Main_23_1()
+        {
+            var input = "247819356";
+            const int times = 100;
+            for (var i = 0; i < times; i++)
+            {
+                var d = input[0] - '0' - 1;
+                if (d < 1)
+                    d = 9;
+                for (var dd = 1; dd < 10; dd++)
+                {
+                    if (input[1] - '0' == d || input[2] - '0' == d || input[3] - '0' == d)
+                    {
+                        d--;
+                        if (d < 1)
+                            d = 9;
+                        continue;
+                    }
+                    
+                    break;
+                }
+
+                for (var k = 4; k < input.Length; k++)
+                {
+                    if (input[k] - '0' == d)
+                    {
+                        input = $"{input.Substring(4, k - 4)}{input[k]}{input.Substring(1, 3)}{input.Substring(k + 1)}{input[0]}";
+                        break;
+                    }
+                }
+            }
+
+            Console.Out.WriteLine(input);
         }
 
         static void Main_22_2()
