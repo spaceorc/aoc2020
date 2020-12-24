@@ -10,12 +10,121 @@ namespace aoc
     {
         static void Main()
         {
-            var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
-                .Select(long.Parse)
-                .ToArray();
+            // var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
+            //     .Select(long.Parse)
+            //     .ToArray();
+            //
+            // long res = 0;
+            // Console.Out.WriteLine(res);
             
-            long res = 0;
-            Console.Out.WriteLine(res);
+            Main_24_1();
+            Main_24_2();
+        }
+        
+        static void Main_24_2()
+        {
+            var lines = File.ReadAllLines("day24.txt");
+
+            const int e = 0;
+            const int se = 1;
+            const int sw = 2;
+            const int w = 3;
+            const int nw = 4;
+            const int ne = 5;
+            var nears = new[] {new V(1, 0), new V(0, 1), new V(-1, 1), new V(-1, 0), new V(0, -1), new V(1, -1)};
+
+            var black = new HashSet<V>();
+            foreach (var line in lines)
+            {
+                var v = new V(0, 0);
+                var i = 0;
+                while (i < line.Length)
+                {
+                    v = line[i++] switch
+                    {
+                        'e' => v + nears[e],
+                        'w' => v + nears[w],
+                        's' => v + (line[i++] == 'e' ? nears[se] : nears[sw]),
+                        'n' => v + (line[i++] == 'e' ? nears[ne] : nears[nw]),  
+                    };
+                }
+
+                if (black.Contains(v))
+                    black.Remove(v);
+                else
+                    black.Add(v);
+            }
+
+            for (var i = 0; i < 100; i++)
+            {
+                var newBlack = new HashSet<V>();
+                var used = new HashSet<V>();
+                foreach (var v in black)
+                {
+                    Process(v);
+                    foreach (var dv in nears)
+                        Process(v + dv);
+                }
+
+                black = newBlack;
+
+                void Process(V v)
+                {
+                    if(!used.Add(v))
+                        return;
+
+                    var nearCount = nears.Select(dv => v + dv).Count(black.Contains);
+                    if (black.Contains(v))
+                    {
+                        if (nearCount == 1 || nearCount == 2)
+                            newBlack.Add(v);
+                    }
+                    else
+                    {
+                        if (nearCount == 2)
+                            newBlack.Add(v);
+                    }
+                }
+            }
+
+            Console.Out.WriteLine(black.Count);
+        }
+
+        static void Main_24_1()
+        {
+            var lines = File.ReadAllLines("day24.txt");
+
+            const int e = 0;
+            const int se = 1;
+            const int sw = 2;
+            const int w = 3;
+            const int nw = 4;
+            const int ne = 5;
+            var nears = new[] {new V(1, 0), new V(0, 1), new V(-1, 1), new V(-1, 0), new V(0, -1), new V(1, -1)};
+
+            var black = new HashSet<V>();
+            foreach (var line in lines)
+            {
+                var v = new V(0, 0);
+                var i = 0;
+                while (i < line.Length)
+                {
+                    v = line[i++] switch
+                    {
+                        'e' => v + nears[e],
+                        'w' => v + nears[w],
+                        's' => v + (line[i++] == 'e' ? nears[se] : nears[sw]),
+                        'n' => v + (line[i++] == 'e' ? nears[ne] : nears[nw]),  
+                    };
+                }
+
+                if (black.Contains(v))
+                    black.Remove(v);
+                else
+                    black.Add(v);
+            }
+
+            Console.Out.WriteLine(black.Count);
         }
 
         static void Main_23_2()
@@ -66,7 +175,7 @@ namespace aoc
 
             var n1 = nodes[1].Next ?? deck.First;
             var n2 = n1!.Next ?? deck.First;
-            Console.Out.WriteLine((long)n1!.Value * n2!.Value);
+            Console.Out.WriteLine((long) n1!.Value * n2!.Value);
         }
 
         static void Main_23_1()
@@ -87,7 +196,7 @@ namespace aoc
                             d = 9;
                         continue;
                     }
-                    
+
                     break;
                 }
 
@@ -95,7 +204,8 @@ namespace aoc
                 {
                     if (input[k] - '0' == d)
                     {
-                        input = $"{input.Substring(4, k - 4)}{input[k]}{input.Substring(1, 3)}{input.Substring(k + 1)}{input[0]}";
+                        input =
+                            $"{input.Substring(4, k - 4)}{input[k]}{input.Substring(1, 3)}{input.Substring(k + 1)}{input[0]}";
                         break;
                     }
                 }
