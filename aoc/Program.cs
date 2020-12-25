@@ -10,15 +10,30 @@ namespace aoc
     {
         static void Main()
         {
-            // var lines = File.ReadAllLines("/Users/spaceorc/Downloads/input.txt")
-            //     .Select(long.Parse)
-            //     .ToArray();
-            //
-            // long res = 0;
-            // Console.Out.WriteLine(res);
+        }
+
+        static void Main_25()
+        {
+            var card = 10212254L;
+            var door = 12577395L;
+
+            Console.Out.WriteLine($"{Decrypt(card)} {Decrypt(door)}");
+            // cardLoops=1063911 doorLoops=1388395
+            // (card ^ doorLoops) mod 20201227 = 290487 (using wolframalpha.com)
             
-            Main_24_1();
-            Main_24_2();
+            long Decrypt(long publicKey)
+            {
+                var v = 1L;
+                int r = 0;
+                while (v != publicKey)
+                {
+                    r++;
+                    v = v * 7L % 20201227L;
+                }
+
+                return r;
+            }
+
         }
         
         static void Main_24_2()
@@ -31,7 +46,15 @@ namespace aoc
             const int w = 3;
             const int nw = 4;
             const int ne = 5;
-            var nears = new[] {new V(1, 0), new V(0, 1), new V(-1, 1), new V(-1, 0), new V(0, -1), new V(1, -1)};
+            var nears = new[]
+            {
+                new V(1, 0),
+                new V(0, 1),
+                new V(-1, 1),
+                new V(-1, 0),
+                new V(0, -1),
+                new V(1, -1)
+            };
 
             var black = new HashSet<V>();
             foreach (var line in lines)
